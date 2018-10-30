@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">diary</string>
+
+    <string name="segmented_view">浏览</string>
+    <string name="segmented_diary">日记</string>
+    <string name="segmented_memo">备忘录</string>
+    <string name="segmented_settings">我</string>
+
 </resources>
