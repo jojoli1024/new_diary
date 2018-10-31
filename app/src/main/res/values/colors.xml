@@ -13,4 +13,8 @@
     <!--Textview-->
     <color name="textview_shadow">#000000</color>
     <color name="textview_hint">#d4d2d4</color>
+    <!--Memo-->
+    <color name="memo_icon_tint">#718698</color>
+    <!--Main-->
+    <color name="topic_divider">#CACACA</color>
 </resources>
