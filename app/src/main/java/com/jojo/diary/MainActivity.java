@@ -7,13 +7,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-//
-public class MainActivity extends AppCompatActivity  implements View.OnClickListener, ViewPager.OnPageChangeListener{
+import info.hoang8f.android.segmented.SegmentedGroup;
+
+//ViewPager.OnPageChangeListener ,View.OnClickListener,
+public class MainActivity extends AppCompatActivity  implements RadioGroup.OnCheckedChangeListener{
+    private SegmentedGroup topbar;
+
     private ViewPager myViewPager;
     //要使用的ViewPager
     private View view,diary,memo,settings;
@@ -23,21 +28,25 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
     private MyPagerAdapter myPagerAdapter;
     //适配器
     private TextView topbar_title;
+
     private RadioButton topbar_view;
     private RadioButton topbar_diary;
     private RadioButton topbar_memo;
     private RadioButton topbar_settings;
 
-    private boolean isScrolling = false;
-    // 手指是否在滑动
-
-    private boolean isBackScrolling  = false;
-    // 手指离开后的回弹
+//    private boolean isScrolling = false;
+//    // 手指是否在滑动
+//
+//    private boolean isBackScrolling  = false;
+//    // 手指离开后的回弹
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        topbar = (SegmentedGroup)findViewById(R.id.topbar);
+        topbar.setOnCheckedChangeListener(this);
 
         initButton();
 
@@ -57,10 +66,10 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
         topbar_settings = (RadioButton)findViewById(R.id.topbar_settings);
 
 
-        topbar_view.setOnClickListener(this);
-        topbar_diary.setOnClickListener(this);
-        topbar_memo.setOnClickListener(this);
-        topbar_settings.setOnClickListener(this);
+//        topbar_view.setOnClickListener(this);
+//        topbar_diary.setOnClickListener(this);
+//        topbar_memo.setOnClickListener(this);
+//        topbar_settings.setOnClickListener(this);
     }
 
     public void initView(){
@@ -89,83 +98,146 @@ public class MainActivity extends AppCompatActivity  implements View.OnClickList
 
         myPagerAdapter = new MyPagerAdapter(pageList);
         myViewPager.setAdapter(myPagerAdapter);
+        myViewPager.addOnPageChangeListener(onPageChangeListener);
     }
 
     @Override
-    public void onClick(View v) {
-//        TextView topbar_title = (TextView)findViewById(R.id.topbar_title);
-//        功能1：设置topbar的标题
-//        功能2：点击按钮，viewpager滑动到响应页面
-//        功能3：滑动页面，tab滑动到对应的选卡按钮（未实现）
-        switch (v.getId()){
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        switch (checkedId){
             case R.id.topbar_view:
-                topbar_title.setText("浏览");
                 myViewPager.setCurrentItem(0);
+                topbar_title.setText("浏览");
                 break;
             case R.id.topbar_diary:
-                topbar_title.setText("日记");
                 myViewPager.setCurrentItem(1);
+                topbar_title.setText("日记");
                 break;
             case R.id.topbar_memo:
-                topbar_title.setText("备忘录");
                 myViewPager.setCurrentItem(2);
+                topbar_title.setText("备忘录");
                 break;
             case R.id.topbar_settings:
-                topbar_title.setText("设置");
                 myViewPager.setCurrentItem(3);
+                topbar_title.setText("我的设置");
                 break;
             default:
                 topbar_title.setText("");
-                myViewPager.setCurrentItem(0);
                 break;
         }
     }
 
-    @Override
-    public void onPageScrollStateChanged(int i) {
-        switch (i){
-            case 1:
-                isScrolling = true;
-                isBackScrolling = false;
-                break;
-            case 2:
-                isBackScrolling = false;
-                isBackScrolling = true;
-                break;
-            default:
-                isScrolling = false;
-                isBackScrolling = false;
-                break;
+    private ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.SimpleOnPageChangeListener() {
+        @Override
+        public void onPageScrolled(int i, float v, int i1) {
+
         }
-    }
 
-    @Override
-    public void onPageSelected(int position) {
-        switch(position){
-            case 0:
-                topbar_view.callOnClick();
-                topbar_view.setBackgroundColor(Color.BLUE);
-                //上面两个都没有用！！！
-                break;
-            case 1:
-                topbar_diary.callOnClick();
-                topbar_diary.setBackgroundColor(Color.BLUE);
-                break;
-            case 2:
-                topbar_memo.callOnClick();
-                topbar_memo.setBackgroundColor(Color.BLUE);
-                break;
-            case 3:
-                topbar_settings.callOnClick();
-                topbar_settings.setBackgroundColor(Color.BLUE);
-                break;
-            default:
-                break;
+        @Override
+        public void onPageSelected(int position) {
+            switch (position){
+                default:
+                    topbar_view.setChecked(true);
+                    topbar_title.setText("浏览");
+                    break;
+                case 1:
+                    topbar_diary.setChecked(true);
+                    topbar_title.setText("日记");
+                    break;
+                case 2:
+                    topbar_memo.setChecked(true);
+                    topbar_title.setText("备忘录");
+                    break;
+                case 3:
+                    topbar_settings.setChecked(true);
+                    topbar_title.setText("我的设置");
+                    break;
+            }
         }
-    }
 
-    @Override
-    public void onPageScrolled(int i, float v, int i1) {
+        @Override
+        public void onPageScrollStateChanged(int i) {
 
-    }
+        }
+    };
+//    @Override
+//    public void onClick(View v) {
+////        TextView topbar_title = (TextView)findViewById(R.id.topbar_title);
+//        功能1：设置topbar的标题
+//        功能2：点击按钮，viewpager滑动到响应页面
+//        功能3：滑动页面，tab滑动到对应的选卡按钮（未实现）
+//        switch (v.getId()){
+//            case R.id.topbar_view:
+//                topbar_title.setText("浏览");
+//                myViewPager.setCurrentItem(0);
+//                break;
+//            case R.id.topbar_diary:
+//                topbar_title.setText("日记");
+//                myViewPager.setCurrentItem(1);
+//                break;
+//            case R.id.topbar_memo:
+//                topbar_title.setText("备忘录");
+//                myViewPager.setCurrentItem(2);
+//                break;
+//            case R.id.topbar_settings:
+//                topbar_title.setText("设置");
+//                myViewPager.setCurrentItem(3);
+//                break;
+//            default:
+//                topbar_title.setText("");
+//                myViewPager.setCurrentItem(0);
+//                break;
+//        }
+//    }
+
+//    @Override
+//    public void onPageScrollStateChanged(int i) {
+//        switch (i){
+//            case 1:
+//                isScrolling = true;
+//                isBackScrolling = false;
+//                break;
+//            case 2:
+//                isBackScrolling = false;
+//                isBackScrolling = true;
+//                break;
+//            default:
+//                isScrolling = false;
+//                isBackScrolling = false;
+//                break;
+//        }
+//    }
+//
+//    @Override
+//    public void onPageSelected(int position) {
+//        switch(position){
+//            case 0:
+////                topbar_view.callOnClick();
+////                topbar_view.setBackgroundColor(Color.BLUE);
+//                //上面两个都没有用！！！
+//                topbar_view.setChecked(true);
+//                break;
+//            case 1:
+////                topbar_diary.callOnClick();
+////                topbar_diary.setBackgroundColor(Color.BLUE);
+//                topbar_diary.setChecked(true);
+//                break;
+//            case 2:
+////                topbar_memo.callOnClick();
+////                topbar_memo.setBackgroundColor(Color.BLUE);
+//                topbar_memo.setChecked(true);
+//                break;
+//            case 3:
+////                topbar_settings.callOnClick();
+////                topbar_settings.setBackgroundColor(Color.BLUE);
+//                topbar_settings.setChecked(true);
+//                break;
+//            default:
+//                break;
+//        }
+//    }
+//
+//    @Override
+//    public void onPageScrolled(int i, float v, int i1) {
+//
+////    }
 }
