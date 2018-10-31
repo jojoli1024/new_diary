@@ -1,4 +1,4 @@
-package com.jojo.diary;
+package com.jojo.diary.main;
 
 import android.graphics.Color;
 import android.support.v4.view.ViewPager;
@@ -9,6 +9,9 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import com.jojo.diary.MyPagerAdapter;
+import com.jojo.diary.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,7 +102,15 @@ public class MainActivity extends AppCompatActivity  implements RadioGroup.OnChe
         myPagerAdapter = new MyPagerAdapter(pageList);
         myViewPager.setAdapter(myPagerAdapter);
         myViewPager.addOnPageChangeListener(onPageChangeListener);
+
+        myViewPager.setCurrentItem(0);
+        topbar_view.setChecked(true);
+        //默认启动之后第一个页面为view_page
     }
+
+//    public void gotoPage(int position) {
+//        myViewPager.setCurrentItem(position);
+//    }
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {

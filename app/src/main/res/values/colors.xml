@@ -7,4 +7,6 @@
     <color name="button_text_color">#b2b2b2</color>
 
     <color name="button_selected_color">#4986e8</color>
+
+    <color name="themeColor_">#67B5F4</color>
 </resources>
