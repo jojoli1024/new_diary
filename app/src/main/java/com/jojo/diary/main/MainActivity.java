@@ -1,46 +1,34 @@
 package com.jojo.diary.main;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
+import android.util.SparseArray;
+import android.view.ViewGroup;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.jojo.diary.R;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.jojo.diary.diary.DiaryFragment;
+import com.jojo.diary.memo.MemoFragment;
+import com.jojo.diary.settings.SettingsFragment;
+import com.jojo.diary.view.ViewFragment;
 
 import info.hoang8f.android.segmented.SegmentedGroup;
 
-//ViewPager.OnPageChangeListener ,View.OnClickListener,
-public class MainActivity extends AppCompatActivity  implements RadioGroup.OnCheckedChangeListener{
+public class MainActivity extends FragmentActivity implements RadioGroup.OnCheckedChangeListener{
     private SegmentedGroup topbar;
 
     private ViewPager myViewPager;
-    //要使用的ViewPager
-    private View view,diary,memo,settings;
-    //ViewPager所包含的页面
-    private List<View> pageList;
-    //ViewPager所包含的页面列表
-    private MyPagerAdapter myPagerAdapter;
-    //适配器
     private TextView topbar_title;
-
-    private RadioButton topbar_view;
-    private RadioButton topbar_diary;
-    private RadioButton topbar_memo;
-    private RadioButton topbar_settings;
-
-//    private boolean isScrolling = false;
-//    // 手指是否在滑动
-//
-//    private boolean isBackScrolling  = false;
-//    // 手指离开后的回弹
+    private RadioButton topbar_view, topbar_diary, topbar_memo, topbar_settings;
+    private ScreenSlidePagerAdapter mPagerAdapter;
+//    List<diaryItem> diaryItemList;
+//    private List<Fragment> fragmentList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,68 +39,32 @@ public class MainActivity extends AppCompatActivity  implements RadioGroup.OnChe
         topbar.setOnCheckedChangeListener(this);
 
         initButton();
+        initViewPager();
 
-        initView();
+        gotoPage(0);
+        topbar_view.setChecked(true);
     }
 
     public void initButton(){
         topbar_title = (TextView)findViewById(R.id.topbar_title);
-//        RadioButton topbar_view = (RadioButton)findViewById(R.id.topbar_view);
-//        RadioButton topbar_diary = (RadioButton)findViewById(R.id.topbar_diary);
-//        RadioButton topbar_memo = (RadioButton)findViewById(R.id.topbar_memo);
-//        RadioButton topbar_settings = (RadioButton)findViewById(R.id.topbar_settings);
 
         topbar_view = (RadioButton)findViewById(R.id.topbar_view);
         topbar_diary = (RadioButton)findViewById(R.id.topbar_diary);
         topbar_memo = (RadioButton)findViewById(R.id.topbar_memo);
         topbar_settings = (RadioButton)findViewById(R.id.topbar_settings);
-
-
-//        topbar_view.setOnClickListener(this);
-//        topbar_diary.setOnClickListener(this);
-//        topbar_memo.setOnClickListener(this);
-//        topbar_settings.setOnClickListener(this);
     }
 
-    public void initView(){
-//        ViewPager myViewPager;
-//        //要使用的ViewPager
-//        View view,diary,memo,settings;
-//        //ViewPager所包含的页面
-//        List<View> pageList;
-//        //ViewPager所包含的页面列表
-//        MyPagerAdapter myPagerAdapter;
-//        //适配器
+    private void gotoPage(int position) {
+        myViewPager.setCurrentItem(position);
+    }
 
-        myViewPager= (ViewPager)findViewById(R.id.ViewPager);
-
-        LayoutInflater inflater = getLayoutInflater();
-        view = inflater.inflate(R.layout.view_page,null);
-        diary = inflater.inflate(R.layout.diary_page,null);
-        memo = inflater.inflate(R.layout.memo_page,null);
-        settings = inflater.inflate(R.layout.settings_page,null);
-
-        pageList = new ArrayList<View>();
-        pageList.add(view);
-        pageList.add(diary);
-        pageList.add(memo);
-        pageList.add(settings);
-
-        myPagerAdapter = new MyPagerAdapter(pageList);
-        myViewPager.setAdapter(myPagerAdapter);
+    private void initViewPager(){
+        myViewPager = (ViewPager)findViewById(R.id.ViewPager);
+        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+        myViewPager.setAdapter(mPagerAdapter);
         myViewPager.addOnPageChangeListener(onPageChangeListener);
 
-        myViewPager.setCurrentItem(0);
-        topbar_view.setChecked(true);
-        //默认启动之后第一个页面为view_page
-
-
-        diary.findViewById(R.id.test).setVisibility(View.VISIBLE);
     }
-
-//    public void gotoPage(int position) {
-//        myViewPager.setCurrentItem(position);
-//    }
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -151,18 +103,11 @@ public class MainActivity extends AppCompatActivity  implements RadioGroup.OnChe
                 default:
                     topbar_view.setChecked(true);
                     topbar_title.setText("浏览");
+
                     break;
                 case 1:
                     topbar_diary.setChecked(true);
                     topbar_title.setText("日记");
-                    //测试代码：viewpager的按钮响应。
-                    final Button test = (Button) diary.findViewById(R.id.test);
-                    test.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            test.setText("test!!!");
-                        }
-                    });
                     break;
                 case 2:
                     topbar_memo.setChecked(true);
@@ -180,85 +125,55 @@ public class MainActivity extends AppCompatActivity  implements RadioGroup.OnChe
 
         }
     };
-//    @Override
-//    public void onClick(View v) {
-////        TextView topbar_title = (TextView)findViewById(R.id.topbar_title);
-//        功能1：设置topbar的标题
-//        功能2：点击按钮，viewpager滑动到响应页面
-//        功能3：滑动页面，tab滑动到对应的选卡按钮（未实现）
-//        switch (v.getId()){
-//            case R.id.topbar_view:
-//                topbar_title.setText("浏览");
-//                myViewPager.setCurrentItem(0);
-//                break;
-//            case R.id.topbar_diary:
-//                topbar_title.setText("日记");
-//                myViewPager.setCurrentItem(1);
-//                break;
-//            case R.id.topbar_memo:
-//                topbar_title.setText("备忘录");
-//                myViewPager.setCurrentItem(2);
-//                break;
-//            case R.id.topbar_settings:
-//                topbar_title.setText("设置");
-//                myViewPager.setCurrentItem(3);
-//                break;
-//            default:
-//                topbar_title.setText("");
-//                myViewPager.setCurrentItem(0);
-//                break;
-//        }
-//    }
 
-//    @Override
-//    public void onPageScrollStateChanged(int i) {
-//        switch (i){
-//            case 1:
-//                isScrolling = true;
-//                isBackScrolling = false;
-//                break;
-//            case 2:
-//                isBackScrolling = false;
-//                isBackScrolling = true;
-//                break;
-//            default:
-//                isScrolling = false;
-//                isBackScrolling = false;
-//                break;
-//        }
-//    }
-//
-//    @Override
-//    public void onPageSelected(int position) {
-//        switch(position){
-//            case 0:
-////                topbar_view.callOnClick();
-////                topbar_view.setBackgroundColor(Color.BLUE);
-//                //上面两个都没有用！！！
-//                topbar_view.setChecked(true);
-//                break;
-//            case 1:
-////                topbar_diary.callOnClick();
-////                topbar_diary.setBackgroundColor(Color.BLUE);
-//                topbar_diary.setChecked(true);
-//                break;
-//            case 2:
-////                topbar_memo.callOnClick();
-////                topbar_memo.setBackgroundColor(Color.BLUE);
-//                topbar_memo.setChecked(true);
-//                break;
-//            case 3:
-////                topbar_settings.callOnClick();
-////                topbar_settings.setBackgroundColor(Color.BLUE);
-//                topbar_settings.setChecked(true);
-//                break;
-//            default:
-//                break;
-//        }
-//    }
-//
-//    @Override
-//    public void onPageScrolled(int i, float v, int i1) {
-//
-////    }
+    private class ScreenSlidePagerAdapter extends FragmentPagerAdapter{
+
+        private SparseArray<Fragment> registeredFragments =new SparseArray<Fragment>();
+
+        public ScreenSlidePagerAdapter(FragmentManager fragmentManager){
+            super(fragmentManager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            Fragment fragment;
+            switch (position){
+                default:
+                    fragment=new ViewFragment();
+                    break;
+                case 1:
+                    fragment=new DiaryFragment();
+                    break;
+                case 2:
+                    fragment=new MemoFragment();
+                    break;
+                case 3:
+                    fragment=new SettingsFragment();
+                    break;
+            }
+            return fragment;
+        }
+
+        @Override
+        public int getCount() {
+            return 4;
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            Fragment fragment = (Fragment) super.instantiateItem(container, position);
+            registeredFragments.put(position, fragment);
+            return fragment;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            registeredFragments.remove(position);
+            super.destroyItem(container, position, object);
+        }
+
+        public Fragment getRegisteredFragment(int position) {
+            return registeredFragments.get(position);
+        }
+    }
 }

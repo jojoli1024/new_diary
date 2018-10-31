@@ -1,6 +1,5 @@
 package com.jojo.diary.view;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,47 +12,63 @@ import com.jojo.diary.R;
 import java.util.List;
 
 public class recycleAdapter extends RecyclerView.Adapter<recycleAdapter.MyViewHolder> {
+
+//    public enum item_type{
+//        item1,
+//        item2;
+//    }
+
     class MyViewHolder extends RecyclerView.ViewHolder {
+
         TextView TV_diary_title;
 
-        //因为删除有可能会删除中间条目，然后会造成角标越界，所以必须整体刷新一下！
+//        TextView title;
+
         public MyViewHolder(View view) {
             super(view);
             TV_diary_title=(TextView)view.findViewById(R.id.TV_diary_item_title);
-//            tv = (TextView) view.findViewById(R.id.add);
-//            tv_delete = (TextView) view.findViewById(R.id.delete);
+//            title = (TextView)view.findViewById(R.id.title);
         }
     }
-    private List<diaryItem> diaryItemList;
-    private Context context;
+//    private List<diaryItem> diaryItemList;
 
-    public recycleAdapter(Context context,List<diaryItem> diaryItemList){
-        this.context=context;
-        this.diaryItemList=diaryItemList;
+//    public recycleAdapter(List<diaryItem> diaryItemList){
+//        this.diaryItemList=diaryItemList;
+//    }
+    private List<String> list;
+
+    public recycleAdapter(List<String> list){
+        this.list=list;
+
     }
-
 
     @Override
     public MyViewHolder onCreateViewHolder( ViewGroup parent, int viewType) {
-        MyViewHolder holder = new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.view_page,parent,false));
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.diary_item,parent,false);
+        MyViewHolder holder = new MyViewHolder(view);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
-        myViewHolder.TV_diary_title.setText("测试");
-
+    public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int position) {
+//        myViewHolder.TV_diary_title.setText("测试");
+        myViewHolder.TV_diary_title.setText(list.get(position));
+//        myViewHolder.title.setText(list.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return diaryItemList.size();
+        return list.size();
     }
 
+//    static int position=list.size();
+
     public void add(int position){
-        diaryItemList.add(position,new diaryItem());
+        list.add(position+":  new");
+        notifyItemInserted(position);
     }
     public void delete(int position){
-        diaryItemList.remove(position);
+        list.remove(position);
+        notifyItemRemoved(position);
     }
 }
