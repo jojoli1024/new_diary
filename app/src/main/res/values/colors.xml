@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--default-->
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-
+    <!--Button-->
     <color name="button_text_color">#b2b2b2</color>
-
     <color name="button_selected_color">#4986e8</color>
-
-    <color name="themeColor_">#5ca8e0</color>
+    <!--Theme-->
+    <color name="themeColor">#5ca8e0</color>
+    <color name="theme_dark_color">#70A3B4</color>
+    <!--Textview-->
+    <color name="textview_shadow">#000000</color>
+    <color name="textview_hint">#d4d2d4</color>
 </resources>
