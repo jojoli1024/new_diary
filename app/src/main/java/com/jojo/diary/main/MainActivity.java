@@ -1,16 +1,15 @@
 package com.jojo.diary.main;
 
-import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.jojo.diary.MyPagerAdapter;
 import com.jojo.diary.R;
 
 import java.util.ArrayList;
@@ -106,6 +105,9 @@ public class MainActivity extends AppCompatActivity  implements RadioGroup.OnChe
         myViewPager.setCurrentItem(0);
         topbar_view.setChecked(true);
         //默认启动之后第一个页面为view_page
+
+
+        diary.findViewById(R.id.test).setVisibility(View.VISIBLE);
     }
 
 //    public void gotoPage(int position) {
@@ -153,6 +155,14 @@ public class MainActivity extends AppCompatActivity  implements RadioGroup.OnChe
                 case 1:
                     topbar_diary.setChecked(true);
                     topbar_title.setText("日记");
+                    //测试代码：viewpager的按钮响应。
+                    final Button test = (Button) diary.findViewById(R.id.test);
+                    test.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            test.setText("test!!!");
+                        }
+                    });
                     break;
                 case 2:
                     topbar_memo.setChecked(true);

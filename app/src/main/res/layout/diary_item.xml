@@ -4,20 +4,20 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <!--<TextView-->
-        <!--android:id="@+id/TV_entries_item_header"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:shadowColor="@color/textview_shadow"-->
-        <!--android:shadowDx="1"-->
-        <!--android:shadowDy="1"-->
-        <!--android:shadowRadius="2"-->
-        <!--android:textColor="@android:color/white"-->
-        <!--android:textSize="50dp" />-->
+    <TextView
+        android:id="@+id/empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:shadowColor="@color/textview_shadow"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="2"
+        android:textColor="@android:color/white"
+        android:textSize="10dp" />
 
     <RelativeLayout
-        android:id="@+id/RL_entries_item_content"
+        android:id="@+id/RL_diary_item_content"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_marginBottom="5dp"
@@ -79,7 +79,7 @@
                         android:src="@drawable/ic_weather_sunny" />
 
                     <ImageView
-                        android:id="@+id/IV_entries_item_mood"
+                        android:id="@+id/IV_diary_item_mood"
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:padding="4dp"

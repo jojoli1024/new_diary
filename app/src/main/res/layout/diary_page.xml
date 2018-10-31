@@ -2,15 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/tv"
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:gravity="center">
+    <!--<TextView-->
+        <!--android:id="@+id/tv"-->
+        <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:background="@android:color/white"-->
+        <!--android:gravity="center"-->
+        <!--android:text="@string/segmented_diary"-->
+        <!--android:textSize="22sp">-->
+    <!--</TextView>-->
+    <Button
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:gravity="center"
-        android:text="@string/segmented_diary"
-        android:textSize="22sp">
-    </TextView>
+        android:layout_height="50dp"
+        android:text="测试"
+        android:id="@+id/test"/>
 </LinearLayout>
