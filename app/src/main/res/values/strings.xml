@@ -7,4 +7,12 @@
     <string name="segmented_settings">我</string>
     <string name="diary_title_hint">你的日记 标题</string>
     <string name="diary_content_hint">你的日记 内容</string>
+    <!--Dialog -->
+    <string name="dialog_button_ok">Ok</string>
+    <string name="dialog_button_call">Call</string>
+    <string name="dialog_button_cancel">Cancel</string>
+    <string name="dialog_button_delete">Delete</string>
+
+    <string name="process_dialog_loading">Loading&#8230;</string>
+    <string name="process_dialog_saving">Saving&#8230;</string>
 </resources>
