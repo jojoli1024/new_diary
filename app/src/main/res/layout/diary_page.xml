@@ -46,14 +46,16 @@
             <RelativeLayout
                 android:id="@+id/RL_diary_info"
                 android:layout_width="match_parent"
-                android:layout_height="100dp">
+                android:layout_height="100dp"
+                android:clickable="true">
 
                 <LinearLayout
                     android:id="@+id/LL_diary_time_information"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_horizontal"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:clickable="false">
                     // 第一层：月份
                     <TextView
                         android:id="@+id/TV_diary_month"
@@ -63,7 +65,8 @@
                         android:includeFontPadding="false"
                         android:textColor="@android:color/white"
                         android:textSize="10dp"
-                        android:text="Month"/>
+                        android:text="Month"
+                        android:clickable="false"/>
 
                     // 第二层：日期
                     <TextView
@@ -74,14 +77,16 @@
                         android:textColor="@android:color/white"
                         android:textSize="50dp"
                         android:textStyle="bold"
-                        android:text="Data"/>
+                        android:text="Date"
+                        android:clickable="false"/>
 
                     // 第三层：星期几+时间
                     <LinearLayout
                         android:id="@+id/LL_diary_day_and_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:clickable="false">
                         // 星期几
                         <TextView
                             android:id="@+id/TV_diary_day"
@@ -90,7 +95,8 @@
                             android:includeFontPadding="false"
                             android:textColor="@android:color/white"
                             android:textSize="10dp"
-                            android:text="Day"/>
+                            android:text="Day"
+                            android:clickable="false"/>
                         // 时间
                         <TextView
                             android:id="@+id/TV_diary_time"
@@ -100,11 +106,11 @@
                             android:includeFontPadding="false"
                             android:textColor="@android:color/white"
                             android:textSize="10dp"
-                            android:text="Time"/>
+                            android:text="Time"
+                            android:clickable="false"/>
                     </LinearLayout>
+
                 </LinearLayout>
-
-
 
                 <!--<ImageView-->
                     <!--android:id="@+id/IV_diary_close_dialog"-->
@@ -116,7 +122,6 @@
                     <!--android:layout_marginTop="5dp"-->
                     <!--android:src="@drawable/ic_clear_white_36dp"-->
                     <!--android:visibility="gone" />-->
-
             </RelativeLayout>
 
             // 标题栏+天气+心情  日记内容
@@ -129,7 +134,7 @@
                 android:orientation="vertical"
                 android:padding="5dp">
 
-                // 标题栏+天气+心情
+                // 标题栏+添加音乐+天气+心情（+显示标题）
                 <LinearLayout
                     android:id="@+id/RL_diary_title_content"
                     android:layout_width="match_parent"
@@ -138,7 +143,7 @@
                     android:orientation="horizontal"
                     android:weightSum="1">
 
-                    // 标题编辑
+                    // 编辑标题内容
                     <EditText
                         android:id="@+id/EDT_diary_title"
                         android:layout_width="0dp"
@@ -151,58 +156,51 @@
                         android:textColorHint="@color/edittext_hint"
                         android:text="2018.11.1"/>
 
-                    // 天气-->音乐
+                    // 添加音乐
+                    <ImageView
+                        android:id="@+id/IV_diary_music"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_music_blue"
+                        android:visibility="visible" />
+
+                    // 天气
                     <RelativeLayout
-                        android:id="@+id/RL_diary_music"
+                        android:id="@+id/RL_diary_weather"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginLeft="0dp"
+                        android:layout_weight="0.15"
+                        android:visibility="visible">
+                        <Spinner
+                        android:id="@+id/SP_diary_weather"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:gravity="center" />
+                    </RelativeLayout>
+
+                    // 心情
+                    <RelativeLayout
+                        android:id="@+id/RL_diary_mood"
+                        android:layout_width="3dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dp"
                         android:layout_weight="0.15">
 
-                        <ImageView
-                            android:layout_width="wrap_content"
+                        <Spinner
+                            android:id="@+id/SP_diary_mood"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/ic_music_blue"
-                            android:visibility="visible" />
-
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_marginStart="0dp"
+                            android:layout_marginLeft="0dp"
+                            android:background="@color/themeColor"
+                            android:gravity="center" />
                     </RelativeLayout>
-                    <!--<RelativeLayout-->
-                        <!--android:id="@+id/RL_diary_weather"-->
-                        <!--android:layout_width="0dp"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_marginLeft="0dp"-->
-                        <!--android:layout_weight="0.15"-->
-                        <!--android:visibility="visible">-->
-                        <!--<Spinner-->
-                        <!--android:id="@+id/SP_diary_weather"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:background="@null"-->
-                        <!--android:gravity="center" />-->
-                    <!--</RelativeLayout>-->
 
-                    <!--// 心情-->
-                    <!--<RelativeLayout-->
-                        <!--android:id="@+id/RL_diary_mood"-->
-                        <!--android:layout_width="0dp"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_marginLeft="2dp"-->
-                        <!--android:layout_weight="0.15">-->
-
-                        <!--<Spinner-->
-                            <!--android:id="@+id/SP_diary_mood"-->
-                            <!--android:layout_width="match_parent"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:layout_alignParentStart="true"-->
-                            <!--android:layout_alignParentLeft="true"-->
-                            <!--android:layout_marginStart="0dp"-->
-                            <!--android:layout_marginLeft="0dp"-->
-                            <!--android:background="@null"-->
-                            <!--android:gravity="center" />-->
-                    <!--</RelativeLayout>-->
-
-                    // 标题内容
+                    // 显示标题内容
                     <TextView
                         android:id="@+id/TV_diary_title_content"
                         android:layout_width="match_parent"
@@ -235,18 +233,21 @@
                         android:layout_centerInParent="true"
                         android:visibility="gone" />
 
+                    // 日记内容编辑+显示
                     <LinearLayout
                         android:id="@+id/LL_diary_item_content"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 
+                        // 编辑日记内容
                         <EditText
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:text="今天也是充实的一天"
                             android:gravity="left|top"/>
 
+                        // 显示日记内容
                         <TextView
                             android:id="@+id/TV_diary_content"
                             android:layout_width="match_parent"
