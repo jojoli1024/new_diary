@@ -5,8 +5,10 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <!--Button-->
+    <color name="button_boarder_color">#cccccc</color>
     <color name="button_text_color">#b2b2b2</color>
-    <color name="button_selected_color">#4986e8</color>
+    <color name="button_text_color_p">#ffffff</color>
+    <color name="button_disable_color">#9D9FA2</color>
     <!--Theme-->
     <color name="themeColor">#5ca8e0</color>
     <color name="theme_dark_color">#70A3B4</color>
@@ -17,4 +19,6 @@
     <color name="memo_icon_tint">#718698</color>
     <!--Main-->
     <color name="topic_divider">#CACACA</color>
+    <!--dialog-->
+    <color name="edittext_hint">#d4d2d4</color>
 </resources>

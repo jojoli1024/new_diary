@@ -21,27 +21,34 @@ public class ViewFragment extends Fragment implements View.OnClickListener{
     private Button delete;
     private RecyclerView recyclerView;
     private recycleAdapter recycleAdapter;
-//    private List<diaryItem> diaryItemList;
-    private List<String> list;
+    private List<diaryItem> diaryItemList;
+//    private List<String> list;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.view_page,container,false);
 
-//        diaryItemList.add(new diaryItem());
-        list =new ArrayList<String>();
-        for(int i=0;i<5;i++){
-            list.add("add:"+i);
-        }
+        diaryItemList = new ArrayList<diaryItem>();
+        diaryItemList.add(new diaryItem(0,"在中山的一天",201811010939L));
+        diaryItemList.add(new diaryItem(1,"再见吧bug",201811011117L));
+        //时间需要重新弄过！！！！！
 
-        add = (Button)rootView.findViewById(R.id.add);
-        add.setOnClickListener(this);
-        delete = (Button)rootView.findViewById(R.id.delete);
-        delete.setOnClickListener(this);
+//        diaryItemList.add(new diaryItem(0,"在中山的一天"));
+//        diaryItemList.add(new diaryItem(1,"再见吧bug"));
+//        list =new ArrayList<String>();
+//        for(int i=0;i<10;i++){
+//            list.add("add:"+i);
+//        }
+
+
+//        add = (Button)rootView.findViewById(R.id.add);
+//        add.setOnClickListener(this);
+//        delete = (Button)rootView.findViewById(R.id.delete);
+//        delete.setOnClickListener(this);
 
         recyclerView = (RecyclerView)rootView.findViewById(R.id.RecyclerView_diary);
-        recycleAdapter = new recycleAdapter(list);
+        recycleAdapter = new recycleAdapter(this,diaryItemList);
         recyclerView.setAdapter(recycleAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 //        recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -57,17 +64,17 @@ public class ViewFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.add:
-//                add.setText("test:add");
-                recycleAdapter.add(list.size()+1);
-                break;
-            case R.id.delete:
-//                delete.setText("test:delete");
-                recycleAdapter.delete(list.size());
-                break;
-            default:
-                break;
-        }
+//        switch (v.getId()){
+//            case R.id.add:
+////                add.setText("test:add");
+//                recycleAdapter.add(list.size());
+//                break;
+//            case R.id.delete:
+////                delete.setText("test:delete");
+//                recycleAdapter.delete(list.size()-1);
+//                break;
+//            default:
+//                break;
+//        }
     }
 }

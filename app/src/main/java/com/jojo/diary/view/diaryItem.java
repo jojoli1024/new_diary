@@ -1,6 +1,9 @@
 package com.jojo.diary.view;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.SimpleFormatter;
+
 //implements Comparable<CalendarDay>
 public class diaryItem {
     private long id;
@@ -9,16 +12,18 @@ public class diaryItem {
     private String summary;
     private int weatherId;
     private int moodId;
-
+//    private SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//小写的mm表示的是分钟
+//    String dstr="2008-4-24";
+//    java.util.Date date=sdf.parse(dstr);
     public diaryItem(){}
 
-    public diaryItem(long id, Date createDate, String title,
-                         int weatherId, int moodId) {
+    public diaryItem(long id, String title, long createDate
+            ) {//, int weatherId, int moodId
         this.id = id;
-        this.createDate = createDate;
+        this.createDate = new Date(createDate);
         this.title = title;
-        this.weatherId = weatherId;
-        this.moodId = moodId;
+//        this.weatherId = weatherId;
+//        this.moodId = moodId;
     }
 
     public void setSummary(String summary) {
@@ -44,6 +49,8 @@ public class diaryItem {
     public int getWeatherId() {
         return weatherId;
     }
+
+    public int getMoodId() {return moodId;}
 
 //    @Override
 //    public int compareTo( CalendarDay calendarDay) {
