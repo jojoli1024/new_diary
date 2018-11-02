@@ -46,11 +46,11 @@ public class diaryItem {
         return summary;
     }
 
-    public int getWeatherId() {
-        return weatherId;
-    }
-
-    public int getMoodId() {return moodId;}
+//    public int getWeatherId() {
+//        return weatherId;
+//    }
+//
+//    public int getMoodId() {return moodId;}
 
 //    @Override
 //    public int compareTo( CalendarDay calendarDay) {

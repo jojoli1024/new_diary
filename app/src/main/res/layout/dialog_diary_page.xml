@@ -20,20 +20,18 @@
             <!--android:textSize="15dp"/>-->
 
         <ImageView
-            android:id="@+id/IV_music_puase"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp"
-            android:src="@drawable/ic_music_pause"
-            android:visibility="visible"/>
-
-        <ImageView
             android:id="@+id/IV_music_play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
-            android:src="@drawable/ic_music_play"
-            android:visibility="visible"/>
+            android:src="@drawable/ic_music_play" />
+
+        <ImageView
+            android:id="@+id/IV_music_puase"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:src="@drawable/ic_music_pause" />
 
     </LinearLayout>
 
