@@ -181,7 +181,7 @@ public class dialog_diaryFragment extends DialogFragment implements View.OnClick
 //           Uri uri = Uri.parse("android.rescore://com.android.jojo/"+R.raw.jentlemo);
 //           Uri uri = Uri.parse(myMusicData.get(0));
 //           myPlayer.setDataSource(getActivity(),uri);
-           myPlayer.setDataSource("/sdcard/download/justblue.mp3");
+           myPlayer.setDataSource("/sdcard/download/jentlemo.mp3");
            myPlayer.prepare();
            myPlayer.setLooping(true);
            myPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {

@@ -18,4 +18,10 @@
         <item name="android:paddingRight">5dp</item>
     </style>
 
+    <style name="ThemeDialog" parent="Theme.AppCompat.Light.Dialog" type="text/css">
+        <item name="colorAccent">@color/themeColor</item>
+        <item name="colorPrimary">@color/themeColor</item>
+        <item name="colorPrimaryDark">@color/themeColor</item>
+    </style>
+
 </resources>
