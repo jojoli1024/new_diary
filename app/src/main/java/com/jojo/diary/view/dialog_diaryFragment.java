@@ -43,17 +43,17 @@ import java.util.ListIterator;
 
 public class dialog_diaryFragment extends DialogFragment implements View.OnClickListener {
 
-    private ScrollView ScrollView_diary_content;
-    private RelativeLayout RL_diary_info;
-    private ProgressBar PB_diary_item_content_hint;
-    private LinearLayout LL_diary_time_information;
+    private ScrollView dialog_ScrollView_diary_content;
+    private RelativeLayout dialog_RL_diary_info;
+    private ProgressBar dialog_PB_diary_item_content_hint;
+    private LinearLayout dialog_LL_diary_time_information;
 
-    private TextView TV_diary_month, TV_diary_date, TV_diary_day, TV_diary_time;
+    private TextView dialog_TV_diary_month, dialog_TV_diary_date, dialog_TV_diary_day, dialog_TV_diary_time;
 
-    private TextView TV_diary_title_content;
-    private EditText EDT_diary_title;
+    private TextView dialog_TV_diary_title_content;
+    private EditText dialog_EDT_diary_title;
 
-    private LinearLayout LL_diary_item_content;
+    private LinearLayout dialog_LL_diary_item_content;
     private ImageView IV_diary_close_dialog,IV_music_puase,IV_music_play;
 
     private long diaryId;
@@ -92,21 +92,21 @@ public class dialog_diaryFragment extends DialogFragment implements View.OnClick
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 //        this.getDialog().setCanceledOnTouchOutside(false);
         View rootView = inflater.inflate(R.layout.dialog_diary_page,container,false);
-        ScrollView_diary_content = (ScrollView)rootView.findViewById(R.id.ScrollView_diary_content);
+        dialog_ScrollView_diary_content = (ScrollView)rootView.findViewById(R.id.dialog_ScrollView_diary_content);
 
-        RL_diary_info = (RelativeLayout) rootView.findViewById(R.id.RL_diary_info);
+        dialog_RL_diary_info = (RelativeLayout) rootView.findViewById(R.id.dialog_RL_diary_info);
 
-        LinearLayout LL_diary_edit_bar = (LinearLayout) rootView.findViewById(R.id.LL_diary_edit_bar);
+        LinearLayout dialog_LL_diary_edit_bar = (LinearLayout) rootView.findViewById(R.id.dialog_LL_diary_edit_bar);
 
-        PB_diary_item_content_hint = (ProgressBar) rootView.findViewById(R.id.PB_diary_item_content_hint);
+        dialog_PB_diary_item_content_hint = (ProgressBar) rootView.findViewById(R.id.dialog_PB_diary_item_content_hint);
 
 
-        TV_diary_month = (TextView) rootView.findViewById(R.id.TV_diary_month);
-        TV_diary_date = (TextView) rootView.findViewById(R.id.TV_diary_date);
-        TV_diary_day = (TextView) rootView.findViewById(R.id.TV_diary_day);
-        TV_diary_time = (TextView) rootView.findViewById(R.id.TV_diary_time);
+        dialog_TV_diary_month = (TextView) rootView.findViewById(R.id.dialog_TV_diary_month);
+        dialog_TV_diary_date = (TextView) rootView.findViewById(R.id.dialog_TV_diary_date);
+        dialog_TV_diary_day = (TextView) rootView.findViewById(R.id.dialog_TV_diary_day);
+        dialog_TV_diary_time = (TextView) rootView.findViewById(R.id.dialog_TV_diary_time);
 
-        LL_diary_item_content = (LinearLayout) rootView.findViewById(R.id.LL_diary_item_content);
+        dialog_LL_diary_item_content = (LinearLayout) rootView.findViewById(R.id.dialog_LL_diary_item_content);
 
         IV_diary_close_dialog = (ImageView) rootView.findViewById(R.id.IV_diary_close_dialog);
         IV_diary_close_dialog.setVisibility(View.VISIBLE);
@@ -126,7 +126,7 @@ public class dialog_diaryFragment extends DialogFragment implements View.OnClick
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        TV_diary_date.setText("11");
+        dialog_TV_diary_date.setText("11");
 //        initData();
     }
 

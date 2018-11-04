@@ -1,5 +1,6 @@
 package com.jojo.diary.view;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,7 +13,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.jojo.diary.R;
+import com.jojo.diary.db.DBManager;
+import com.jojo.diary.db.DBhelper;
+import com.jojo.diary.diary.DiaryFragment;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,16 +27,25 @@ public class ViewFragment extends Fragment implements View.OnClickListener{
     private RecyclerView recyclerView;
     private recycleAdapter recycleAdapter;
     private List<diaryItem> diaryItemList;
+
+    private SQLiteDatabase db;
+    private DBManager dbManager;
+
 //    private List<String> list;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        db = SQLiteDatabase.openOrCreateDatabase("/data/user/0/com.jojo.diary/databases/mydiary.db",null);
+        dbManager = new DBManager(db);
+
         View rootView = inflater.inflate(R.layout.view_page,container,false);
 
         diaryItemList = new ArrayList<diaryItem>();
-        diaryItemList.add(new diaryItem(0,"在中山的一天",201811010939L));
-        diaryItemList.add(new diaryItem(1,"再见吧bug",201811011117L));
+        diaryItemList = dbManager.getDiaryItemList(diaryItemList);
+        diaryItemList.add(new diaryItem(0,"在中山的一天","2018-11-01 11:15"));
+//        diaryItemList.add(new diaryItem(1,"再见吧bug","2018-11-04 09:50"));
         //时间需要重新弄过！！！！！
 
 //        diaryItemList.add(new diaryItem(0,"在中山的一天"));

@@ -95,7 +95,7 @@ public class recycleAdapter extends RecyclerView.Adapter<recycleAdapter.MyViewHo
         Calendar calendar=Calendar.getInstance();
         calendar.setTime(date);
         String day=calendar.get(Calendar.DAY_OF_MONTH)+"";
-        String month=calendar.get(Calendar.MONTH)+"";
+        String month=(calendar.get(Calendar.MONTH) +1) +"";
         String time=String.valueOf(new SimpleDateFormat("HH:mm").format(calendar.getTime()));
 //        Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE)+":"+calendar.get(Calendar.SECOND);
         myViewHolder.TV_diary_item_day.setText(day);

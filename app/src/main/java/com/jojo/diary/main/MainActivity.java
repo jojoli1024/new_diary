@@ -1,5 +1,6 @@
 package com.jojo.diary.main;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -13,6 +14,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.jojo.diary.R;
+import com.jojo.diary.db.DBManager;
+import com.jojo.diary.db.DBhelper;
 import com.jojo.diary.diary.DiaryFragment;
 import com.jojo.diary.memo.MemoFragment;
 import com.jojo.diary.settings.SettingsFragment;
@@ -27,6 +30,9 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
     private TextView topbar_title;
     private RadioButton topbar_view, topbar_diary, topbar_memo, topbar_settings;
     private ScreenSlidePagerAdapter mPagerAdapter;
+
+    private DBhelper dBhelper;
+    private DBManager dbManager;
 //    List<diaryItem> diaryItemList;
 //    private List<Fragment> fragmentList;
 
@@ -43,6 +49,14 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
 
         gotoPage(0);
         topbar_view.setChecked(true);
+
+//        deleteDatabase("mydiary.db");
+//
+//        dBhelper = new DBhelper(MainActivity.this);
+//        SQLiteDatabase db = dBhelper.getWritableDatabase();
+//        dbManager = new DBManager(db);
+
+        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase("data/user/0/com.jojo.diary/mydiary.db",null);
     }
 
     public void initButton(){

@@ -1,5 +1,7 @@
 package com.jojo.diary.view;
 
+import android.util.Log;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.SimpleFormatter;
@@ -10,6 +12,7 @@ public class diaryItem {
     private Date createDate;
     private String title;
     private String summary;
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private int weatherId;
     private int moodId;
 //    private SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//小写的mm表示的是分钟
@@ -17,10 +20,15 @@ public class diaryItem {
 //    java.util.Date date=sdf.parse(dstr);
     public diaryItem(){}
 
-    public diaryItem(long id, String title, long createDate
+    public diaryItem(long id, String title, String createDate
             ) {//, int weatherId, int moodId
         this.id = id;
-        this.createDate = new Date(createDate);
+        try {
+            this.createDate = simpleDateFormat.parse(createDate);
+        } catch (Exception e){
+            Log.e("diaryItem的创建","时间类型转换异常");
+        }
+
         this.title = title;
 //        this.weatherId = weatherId;
 //        this.moodId = moodId;
@@ -28,6 +36,19 @@ public class diaryItem {
 
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setCreateDate(String createDate) {
+        try {
+            this.createDate = simpleDateFormat.parse(createDate);
+        } catch (Exception e){
+            Log.e("setCreateDate","时间类型转换异常");
+        }
+
     }
 
     public long getId() {

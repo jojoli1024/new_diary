@@ -5,6 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
+import com.jojo.diary.view.diaryItem;
+
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 public class DBManager {
     private Context context;
@@ -24,7 +30,7 @@ public class DBManager {
 
     // Id自动生成
     // 日记：新建、更新、删除
-    public long insertDiary(String title, long musicId, String content){
+    public long insertDiary(String diary_date, String title, String content){
         return db.insert(
                 DBStructure.DBdiary.TABLE_NAME,
                 //nullColumnHack这个参数是一个字段名，String类型，
@@ -32,11 +38,11 @@ public class DBManager {
                 // 但是如果你指定一个字段名为nullColumnHack的值，
                 // 则数据库允许参加所有字段值都为NULL的记录，就不会报错。
                 null,
-                this.createDiary(title, musicId, content));
+                this.createDiary(title, content,diary_date));
     }
 
-    public long updateDiary(long diaryId, String title, long musicId, String content){
-        ContentValues values = this.createDiary(title, musicId, content);
+    public long updateDiary(long diaryId, String title, String content,String diary_date){
+        ContentValues values = this.createDiary(title, content ,diary_date);
         return db.update(
                 DBStructure.DBdiary.TABLE_NAME,
                 values,
@@ -53,11 +59,11 @@ public class DBManager {
         );
     }
 
-    private ContentValues createDiary(String  title, long musicId, String content){
+    private ContentValues createDiary(String  title, String content, String diary_date){
         ContentValues values = new ContentValues();
         values.put(DBStructure.DBdiary.COLUMN_TITLE, title);
-        values.put(DBStructure.DBdiary.COLUMN_MUSICID, musicId);
         values.put(DBStructure.DBdiary.COLUMN_CONTENT, content);
+        values.put(DBStructure.DBdiary.COLUMN_DATE,diary_date);
         return values;
     }
 
@@ -96,21 +102,33 @@ public class DBManager {
     }
 
 
-    // 音乐：插入音乐
-    public long insertMusic(String musicName){
-        return db.insert(
-                DBStructure.DBmusic.TABLE_NAME,
-                null,
-                this.createMusic(musicName));
+    public List<diaryItem> getDiaryItemList(List<diaryItem> diaryItemList){
+        Cursor cursor = db.query(DBStructure.DBdiary.TABLE_NAME,
+                new String[]{"_id","diaryDate","diaryTitle","diaryContent"},
+                null,null,null,null,null);
+        long id;
+        String diaryDate,diaryTitle,diaryContent;
+        while (cursor.moveToNext()){
+            id = cursor.getLong(cursor.getColumnIndex("_id"));
+            diaryDate = cursor.getString(cursor.getColumnIndex("diaryDate"));
+            diaryTitle = cursor.getString(cursor.getColumnIndex("diaryTitle"));
+            diaryContent = cursor.getString(cursor.getColumnIndex("diaryContent"));
+            diaryItem diaryItem = new diaryItem(id, diaryTitle,diaryDate);
+
+            Log.e("diaryItem date", diaryDate);
+            Log.e("diaryItem title",diaryTitle);
+
+            diaryItem.setSummary(diaryContent);
+            Log.e("diaryItem content",diaryContent);
+
+            if(diaryItem == null){
+                Log.e("diaryItem","is null!");
+            } else{
+                diaryItemList.add(diaryItem);
+            }
+        }
+        return diaryItemList;
     }
-
-    private ContentValues createMusic(String musicName){
-        ContentValues values = new ContentValues();
-        values.put(DBStructure.DBmusic.COLUMN_NAME, musicName);
-        return values;
-    }
-
-
 
     public Cursor selectDiaryList(long diaryId) {
         Cursor c = db.query(DBStructure.DBdiary.TABLE_NAME,
@@ -123,4 +141,6 @@ public class DBManager {
         }
         return c;
     }
+
+
 }
