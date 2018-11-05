@@ -101,7 +101,6 @@ public class DBManager {
         return values;
     }
 
-
     public List<diaryItem> getDiaryItemList(List<diaryItem> diaryItemList){
         Cursor cursor = db.query(DBStructure.DBdiary.TABLE_NAME,
                 new String[]{"_id","diaryDate","diaryTitle","diaryContent"},
@@ -140,6 +139,34 @@ public class DBManager {
             c.moveToFirst();
         }
         return c;
+    }
+
+    public diaryItem getDiaryItem(long diaryId) {
+        Cursor cursor = db.query(DBStructure.DBdiary.TABLE_NAME,
+                new String[]{"_id","diaryDate","diaryTitle","diaryContent"},
+                DBStructure.DBdiary._ID + " = ?",
+                new String[]{String.valueOf(diaryId)}, null, null,
+                DBStructure.DBdiary.COLUMN_DATE + " DESC , " + DBStructure.DBdiary._ID + " DESC",
+                null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        long id;
+        String diaryDate,diaryTitle,diaryContent;
+
+        id = cursor.getLong(cursor.getColumnIndex("_id"));
+        diaryDate = cursor.getString(cursor.getColumnIndex("diaryDate"));
+        diaryTitle = cursor.getString(cursor.getColumnIndex("diaryTitle"));
+        diaryContent = cursor.getString(cursor.getColumnIndex("diaryContent"));
+        diaryItem diaryItem = new diaryItem(id, diaryTitle,diaryDate);
+
+        Log.e("diaryItem date", diaryDate);
+        Log.e("diaryItem title",diaryTitle);
+
+        diaryItem.setSummary(diaryContent);
+        Log.e("diaryItem content",diaryContent);
+
+        return diaryItem;
     }
 
 

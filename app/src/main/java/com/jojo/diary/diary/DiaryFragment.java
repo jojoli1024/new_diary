@@ -126,7 +126,7 @@ public class DiaryFragment extends Fragment implements View.OnClickListener {
         title = EDT_diary_title.getText().toString();
         content = EDT_diary_content.getText().toString();
         date = "" + calendar.get(Calendar.YEAR) + "-" +
-                calendar.get(Calendar.MONTH) + "-" +
+                (calendar.get(Calendar.MONTH)+1) + "-" +
                 calendar.get(Calendar.DAY_OF_MONTH) + " " +
                 calendar.get(Calendar.HOUR_OF_DAY) + ":" +
                 calendar.get(Calendar.MINUTE);
@@ -134,4 +134,3 @@ public class DiaryFragment extends Fragment implements View.OnClickListener {
 //        dbManager.closeDB();
     }
 }
-

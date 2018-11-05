@@ -28,7 +28,7 @@ public class recycleAdapter extends RecyclerView.Adapter<recycleAdapter.MyViewHo
 
         private TextView TV_diary_item_day,TV_diary_item_month;
         private TextView TV_diary_item_time,TV_diary_item_title,TV_diary_item_summary;
-        private ImageView IV_diary_item_weather,IV_diary_item_mood;
+//        private ImageView IV_diary_item_weather,IV_diary_item_mood;
 
 //        TextView title;
 
@@ -39,8 +39,8 @@ public class recycleAdapter extends RecyclerView.Adapter<recycleAdapter.MyViewHo
             TV_diary_item_time=(TextView)view.findViewById(R.id.TV_diary_item_time);
             TV_diary_item_title=(TextView)view.findViewById(R.id.TV_diary_item_title);
             TV_diary_item_summary=(TextView)view.findViewById(R.id.TV_diary_item_summary);
-            IV_diary_item_weather=(ImageView)view.findViewById(R.id.IV_diary_item_weather);
-            IV_diary_item_mood=(ImageView)view.findViewById(R.id.IV_diary_item_mood);
+//            IV_diary_item_weather=(ImageView)view.findViewById(R.id.IV_diary_item_weather);
+//            IV_diary_item_mood=(ImageView)view.findViewById(R.id.IV_diary_item_mood);
 
 //            title = (TextView)view.findViewById(R.id.title);
 
@@ -58,7 +58,7 @@ public class recycleAdapter extends RecyclerView.Adapter<recycleAdapter.MyViewHo
             dialog_diary.setTargetFragment(viewFragment,0);
             dialog_diary.show(viewFragment.getFragmentManager(),"dialog_diary");
 //            dialog_diary.show();
-            TV_diary_item_summary.setText("你点击了onClick！");
+//            TV_diary_item_summary.setText("你点击了onClick！");
         }
 
         @Override
@@ -74,7 +74,9 @@ public class recycleAdapter extends RecyclerView.Adapter<recycleAdapter.MyViewHo
     public recycleAdapter(ViewFragment viewFragment,List<diaryItem> diaryItemList){
         this.viewFragment=viewFragment;
         this.diaryItemList=diaryItemList;
+//        notifyDataSetChanged();
     }
+
 //    private List<String> list;
 //
 //    public recycleAdapter(List<String> list){
@@ -125,12 +127,12 @@ public class recycleAdapter extends RecyclerView.Adapter<recycleAdapter.MyViewHo
 
 //    static int position=list.size();
 
-//    public void add(int position){
+    public void add(int position){
 //        list.add(position+":  new");
-//        notifyItemInserted(position);
-//    }
-//    public void delete(int position){
+        notifyItemInserted(position);
+    }
+    public void delete(int position){
 //        list.remove(position);
-//        notifyItemRemoved(position);
-//    }
+        notifyItemRemoved(position);
+    }
 }

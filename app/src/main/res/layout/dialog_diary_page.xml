@@ -20,6 +20,12 @@
         <!--android:textSize="15dp"/>-->
 
         <ImageView
+            android:id="@+id/dialog_IV_diary_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_delete_white_24dp" />
+
+        <ImageView
             android:id="@+id/IV_music_puase"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -59,7 +65,6 @@
                 android:background="@color/themeColor">
 
                 <LinearLayout
-                    android:id="@+id/dialog_LL_diary_time_information"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_horizontal"
@@ -86,7 +91,6 @@
                         android:text="date"/>
 
                     <LinearLayout
-                        android:id="@+id/dialog_LL_diary_day_and_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
@@ -150,7 +154,6 @@
 
 
             <LinearLayout
-                android:id="@+id/dialog_RL_diary_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/dialog_RL_diary_info"
@@ -160,45 +163,14 @@
 
 
                 <LinearLayout
-                    android:id="@+id/dialog_RL_diary_title_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:weightSum="1">
 
-                    <!--<RelativeLayout-->
-                    <!--android:id="@+id/dialog_RL_diary_weather"-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_marginLeft="2dp"-->
-                    <!--android:layout_weight="0.15">-->
-
-                    <!--<Spinner-->
-                    <!--android:id="@+id/dialog_SP_diary_weather"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:background="@null"-->
-                    <!--android:gravity="center" />-->
-                    <!--</RelativeLayout>-->
-
-                    <!--<RelativeLayout-->
-                    <!--android:id="@+id/dialog_RL_diary_mood"-->
-                    <!--android:layout_width="0dp"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_marginLeft="2dp"-->
-                    <!--android:layout_weight="0.15">-->
-
-                    <!--<Spinner-->
-                    <!--android:id="@+id/dialog_SP_diary_mood"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:background="@null"-->
-                    <!--android:gravity="center" />-->
-                    <!--</RelativeLayout>-->
-
                     <TextView
-                        android:id="@+id/dialog_TV_diary_title_content"
+                        android:id="@+id/dialog_TV_diary_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -213,29 +185,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <TextView
-                        android:id="@+id/dialog_TV_diary_item_content_hint"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:text="@string/diary_content_hint"
-                        android:textSize="28dp"
-                        android:visibility="visible" />
-
-                    <ProgressBar
-                        android:id="@+id/dialog_PB_diary_item_content_hint"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:visibility="gone" />
-
                     <LinearLayout
-                        android:id="@+id/dialog_LL_diary_item_content"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 
-
+                        <TextView
+                            android:id="@+id/dialog_TV_diary_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:hint="@string/diary_content_hint"/>
                     </LinearLayout>
                 </RelativeLayout>
             </LinearLayout>
