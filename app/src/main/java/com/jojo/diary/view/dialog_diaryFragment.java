@@ -2,17 +2,12 @@ package com.jojo.diary.view;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.content.ContentResolver;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -27,9 +22,6 @@ import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,16 +29,10 @@ import com.jojo.diary.R;
 import com.jojo.diary.TimeTools;
 import com.jojo.diary.db.DBManager;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 
 public class dialog_diaryFragment extends DialogFragment implements View.OnClickListener {
 
@@ -57,22 +43,31 @@ public class dialog_diaryFragment extends DialogFragment implements View.OnClick
     private ImageView IV_diary_close_dialog,IV_music_puase,IV_music_play,dialog_IV_diary_delete;
 
     private static long diaryId;
+    private static boolean isEditMode;
     private SQLiteDatabase db;
     private DBManager dbManager;
 
     private MediaPlayer myPlayer;
     private TimeTools timeTools;
 
+    private LinearLayout dialog_LL_diary_setDate;
+    private EditText dialog_EDT_diary_title, dialog_EDT_diary_content;
+    private ImageView dialog_IV_diary_save;
+    private String reTitle,reContent,reDate;
+    private static int index;
 
-    public static dialog_diaryFragment newInstance(long Id,boolean isEditMode){
+    public static dialog_diaryFragment newInstance(int position,long Id,boolean EditMode){
+        index = position;
         Bundle args = new Bundle();
         dialog_diaryFragment fragment = new dialog_diaryFragment();
         args.putLong("diaryId",Id);
         diaryId = Id;
 
-        Log.e("点击的item的diaryId",String.valueOf(diaryId));
+//        Log.e("点击的item的diaryId",String.valueOf(diaryId));
 
-        args.putBoolean("isEditMode",isEditMode);
+        args.putBoolean("isEditMode",EditMode);
+        isEditMode = EditMode;
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -131,6 +126,21 @@ public class dialog_diaryFragment extends DialogFragment implements View.OnClick
         db = SQLiteDatabase.openOrCreateDatabase("/data/user/0/com.jojo.diary/databases/mydiary.db",null);
         dbManager = new DBManager(db);
 
+        dialog_EDT_diary_content = (EditText)rootView.findViewById(R.id.dialog_EDT_diary_content);
+        dialog_EDT_diary_title = (EditText)rootView.findViewById(R.id.dialog_EDT_diary_title);
+        dialog_LL_diary_setDate = (LinearLayout)rootView.findViewById(R.id.dialog_LL_diary_setDate);
+        dialog_IV_diary_save = (ImageView)rootView.findViewById(R.id.dialog_IV_diary_save);
+        dialog_IV_diary_save.setOnClickListener(this);
+
+        if(isEditMode){
+            dialog_EDT_diary_content.setVisibility(View.VISIBLE);
+            dialog_EDT_diary_title.setVisibility(View.VISIBLE);
+            dialog_IV_diary_save.setVisibility(View.VISIBLE);
+
+            dialog_TV_diary_title.setVisibility(View.GONE);
+            dialog_TV_diary_content.setVisibility(View.GONE);
+        }
+
         return rootView;
     }
 
@@ -173,7 +183,14 @@ public class dialog_diaryFragment extends DialogFragment implements View.OnClick
 
         dialog_TV_diary_title.setText(title);
 
+        dialog_EDT_diary_title.setText(title);
+
         dialog_TV_diary_content.setText(content);
+
+        dialog_EDT_diary_content.setText(content);
+
+        sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        reDate = sdf.format(calendar.getTime());
 
 //        dbManager.closeDB();
 //        initData();
@@ -238,7 +255,6 @@ public class dialog_diaryFragment extends DialogFragment implements View.OnClick
                    player.start();
                }
            });
-           myPlayer.start();
 
 //           if (myPlayer != null){
 //               myPlayer.start();
@@ -266,6 +282,14 @@ public class dialog_diaryFragment extends DialogFragment implements View.OnClick
 
     private void deleteDiary(long diaryId){
         dbManager.delDiary(diaryId);
+
+        ViewFragment.recycleAdapter.delete(index);
+//        ViewFragment.diaryItemList.remove((int)diaryId);
+    }
+    private void rewriteDiary(long diaryId){
+        reTitle = dialog_EDT_diary_title.getText().toString();
+        reContent = dialog_EDT_diary_content.getText().toString();
+        dbManager.updateDiary(diaryId,reTitle,reContent,reDate);
     }
 
     @Override
@@ -321,6 +345,11 @@ public class dialog_diaryFragment extends DialogFragment implements View.OnClick
                 break;
             case R.id.dialog_IV_diary_delete:
                 deleteDiary(diaryId);
+                db.close();
+                break;
+            case R.id.dialog_IV_diary_save:
+                Toast.makeText(getActivity(),"save！",Toast.LENGTH_SHORT).show();
+                rewriteDiary(diaryId);
                 break;
             default:
                 break;

@@ -53,7 +53,7 @@ public class recycleAdapter extends RecyclerView.Adapter<recycleAdapter.MyViewHo
             //打开一个日记浏览模式
 //            v.findViewById(R.layout.dialog_diary_page);
             boolean isEditMode = false;
-            dialog_diaryFragment dialog_diary= dialog_diaryFragment.newInstance(diaryItemList.get(getAdapterPosition()).getId(),
+            dialog_diaryFragment dialog_diary= dialog_diaryFragment.newInstance(getAdapterPosition(),diaryItemList.get(getAdapterPosition()).getId(),
                     isEditMode);
             dialog_diary.setTargetFragment(viewFragment,0);
             dialog_diary.show(viewFragment.getFragmentManager(),"dialog_diary");
@@ -64,7 +64,13 @@ public class recycleAdapter extends RecyclerView.Adapter<recycleAdapter.MyViewHo
         @Override
         public boolean onLongClick(View v) {
             //长按编辑日记
-            TV_diary_item_summary.setText("你点击了onLongClick！");
+            boolean isEditMode = true;
+            dialog_diaryFragment dialog_diary= dialog_diaryFragment.newInstance(getAdapterPosition(),diaryItemList.get(getAdapterPosition()).getId(),
+                    isEditMode);
+            dialog_diary.setTargetFragment(viewFragment,0);
+            dialog_diary.show(viewFragment.getFragmentManager(),"dialog_diary");
+
+//            TV_diary_item_summary.setText("你点击了onLongClick！");
             return true;
         }
     }
@@ -127,12 +133,12 @@ public class recycleAdapter extends RecyclerView.Adapter<recycleAdapter.MyViewHo
 
 //    static int position=list.size();
 
-    public void add(int position){
-//        list.add(position+":  new");
+    public void add(diaryItem item,int position){
+        diaryItemList.add(item);
         notifyItemInserted(position);
     }
     public void delete(int position){
-//        list.remove(position);
+        diaryItemList.remove(position);
         notifyItemRemoved(position);
     }
 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +20,11 @@ import com.jojo.diary.TimeTools;
 import com.jojo.diary.db.DBManager;
 import com.jojo.diary.db.DBhelper;
 import com.jojo.diary.main.MainActivity;
+import com.jojo.diary.view.ViewFragment;
+import com.jojo.diary.view.diaryItem;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 // implements View.OnClickListener
@@ -95,6 +99,8 @@ public class DiaryFragment extends Fragment implements View.OnClickListener {
         DBManager dbManager = new DBManager(db);
         switch(v.getId()){
             case R.id.IV_diary_page_delete:
+                EDT_diary_title.setText("");
+                EDT_diary_content.setText("");
                 Toast.makeText(getActivity(),"delete successfully!!", Toast.LENGTH_SHORT).show();
 //                if (diaryItemHelper.getItemSize())
                 break;
@@ -108,6 +114,9 @@ public class DiaryFragment extends Fragment implements View.OnClickListener {
 //                }
 //                Toast.makeText(getActivity(),"save successfully!!", Toast.LENGTH_SHORT).show();
                 saveDiary(dbManager);
+                db.close();
+                EDT_diary_title.setText("");
+                EDT_diary_content.setText("");
                 break;
             case R.id.IV_diary_music:
                 Toast.makeText(getActivity(),"music successfully!!", Toast.LENGTH_SHORT).show();
@@ -117,6 +126,7 @@ public class DiaryFragment extends Fragment implements View.OnClickListener {
                 Toast.makeText(getActivity(),"calendar successfully!!", Toast.LENGTH_SHORT).show();
                 break;
             default:
+                db.close();
                 break;
         }
     }
@@ -131,6 +141,20 @@ public class DiaryFragment extends Fragment implements View.OnClickListener {
                 calendar.get(Calendar.HOUR_OF_DAY) + ":" +
                 calendar.get(Calendar.MINUTE);
         dbManager.insertDiary(date,title,content);
+
+        ViewFragment.diaryItemList=new ArrayList<diaryItem>();
+        ViewFragment.diaryItemList=dbManager.getDiaryItemList(ViewFragment.diaryItemList);
+
+        int index = ViewFragment.diaryItemList.size();
+//        Log.e("diaryItemList.size",""+index);
+//        Log.e("diaryItem(index - 1)",""+ViewFragment.diaryItemList.get(index - 1).getId());
+
+        long diaryId = ViewFragment.diaryItemList.get(index - 1).getId();
+//        Log.e("diaryId",""+diaryId);
+//        Log.e("插入日记刷新",""+index);
+        diaryItem item = dbManager.getDiaryItem(diaryId);
+        ViewFragment.recycleAdapter.add(item,(int)index);
+
 //        dbManager.closeDB();
     }
 }

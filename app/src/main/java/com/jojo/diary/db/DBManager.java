@@ -7,6 +7,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.jojo.diary.memo.memoItem;
 import com.jojo.diary.view.diaryItem;
 
 import java.text.SimpleDateFormat;
@@ -69,22 +70,22 @@ public class DBManager {
 
 
     // 备忘录：新建、更新、删除
-    public long insertMemo(String date, String info){
+    public long insertMemo(String Memo_date, String info){
         return db.insert(
                 DBStructure.DBmemo.TABLE_NAME,
                 null,
-                this.createMemo(date, info));
+                this.createMemo(Memo_date, info));
     }
 
-    public long updateMemo(long memoId, String date, String info){
-        ContentValues values = this.createMemo(date, info);
-        return db.update(
-                DBStructure.DBmemo.TABLE_NAME,
-                values,
-                DBStructure.DBmemo._ID + "=?",
-                new String[]{String.valueOf(memoId)}
-        );
-    }
+//    public long updateMemo(long memoId, String date, String info){
+//        ContentValues values = this.createMemo(date, info);
+//        return db.update(
+//                DBStructure.DBmemo.TABLE_NAME,
+//                values,
+//                DBStructure.DBmemo._ID + "=?",
+//                new String[]{String.valueOf(memoId)}
+//        );
+//    }
 
     public long delMemo(long memoId){
         return db.delete(
@@ -114,11 +115,11 @@ public class DBManager {
             diaryContent = cursor.getString(cursor.getColumnIndex("diaryContent"));
             diaryItem diaryItem = new diaryItem(id, diaryTitle,diaryDate);
 
-            Log.e("diaryItem date", diaryDate);
-            Log.e("diaryItem title",diaryTitle);
+//            Log.e("diaryItem date", diaryDate);
+//            Log.e("diaryItem title",diaryTitle);
 
             diaryItem.setSummary(diaryContent);
-            Log.e("diaryItem content",diaryContent);
+//            Log.e("diaryItem content",diaryContent);
 
             if(diaryItem == null){
                 Log.e("diaryItem","is null!");
@@ -129,16 +130,43 @@ public class DBManager {
         return diaryItemList;
     }
 
-    public Cursor selectDiaryList(long diaryId) {
-        Cursor c = db.query(DBStructure.DBdiary.TABLE_NAME,
-                null, DBStructure.DBdiary._ID + " = ?",
-                new String[]{String.valueOf(diaryId)}, null, null,
-                DBStructure.DBdiary.COLUMN_DATE + " DESC , " + DBStructure.DBdiary._ID + " DESC",
-                null);
-        if (c != null) {
-            c.moveToFirst();
+    public List<memoItem> getMemoItemList(List<memoItem> memoItemList){
+        Cursor cursor = db.query(DBStructure.DBmemo.TABLE_NAME,
+                new String[]{"_id","memoDate","memoInfo"},
+                null,null,null,null,null);
+        long id;
+        String memoDate,memoInfo;
+        while (cursor.moveToNext()){
+            id = cursor.getLong(cursor.getColumnIndex("_id"));
+            memoDate = cursor.getString(cursor.getColumnIndex("memoDate"));
+            memoInfo = cursor.getString(cursor.getColumnIndex("memoInfo"));
+
+            memoItem memoItem = new memoItem(id,memoDate,memoInfo);
+
+//            Log.e("memoItem date", memoDate);
+//            Log.e("memoItem title",memoInfo);
+
+            if(memoItem == null){
+                Log.e("memoItem","is null!");
+            } else{
+                memoItemList.add(memoItem);
+            }
         }
-        return c;
+        return memoItemList;
+    }
+
+    public memoItem getMemoItem(long memoId){
+        Cursor cursor = db.query(DBStructure.DBmemo.TABLE_NAME,
+                new String[]{"_id","memoDate","memoInfo"},
+                DBStructure.DBmemo._ID + " = ?",
+                new String[]{String.valueOf(memoId)},null,null,null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        memoItem memoItem = new memoItem(cursor.getLong(cursor.getColumnIndex("_id")),
+                cursor.getString(cursor.getColumnIndex("memoDate")),
+                cursor.getString(cursor.getColumnIndex("memoInfo")));
+        return memoItem;
     }
 
     public diaryItem getDiaryItem(long diaryId) {
@@ -160,11 +188,11 @@ public class DBManager {
         diaryContent = cursor.getString(cursor.getColumnIndex("diaryContent"));
         diaryItem diaryItem = new diaryItem(id, diaryTitle,diaryDate);
 
-        Log.e("diaryItem date", diaryDate);
-        Log.e("diaryItem title",diaryTitle);
+//        Log.e("diaryItem date", diaryDate);
+//        Log.e("diaryItem title",diaryTitle);
 
         diaryItem.setSummary(diaryContent);
-        Log.e("diaryItem content",diaryContent);
+//        Log.e("diaryItem content",diaryContent);
 
         return diaryItem;
     }

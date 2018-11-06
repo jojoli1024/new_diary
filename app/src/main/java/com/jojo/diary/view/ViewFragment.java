@@ -22,29 +22,30 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewFragment extends Fragment implements View.OnClickListener{
+public class ViewFragment extends Fragment {
 //    private Button add;
 //    private Button delete;
     private RecyclerView recyclerView;
-    private recycleAdapter recycleAdapter;
-    private List<diaryItem> diaryItemList;
+    public static recycleAdapter recycleAdapter;
+    public static List<diaryItem> diaryItemList;
 
     private SQLiteDatabase db;
     private DBManager dbManager;
 
 //    private List<String> list;
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+//        "/data/user/0/com.jojo.diary/databases/mydiary.db"
         db = SQLiteDatabase.openOrCreateDatabase("/data/user/0/com.jojo.diary/databases/mydiary.db",null);
         dbManager = new DBManager(db);
 //        dbManager.openDB();
 
         diaryItemList = new ArrayList<diaryItem>();
         diaryItemList = dbManager.getDiaryItemList(diaryItemList);
-        diaryItemList.add(new diaryItem(0,"在中山的一天","2018-11-01 11:15"));
+//        diaryItemList.add(new diaryItem(0,"在中山的一天","2018-11-01 11:15"));
 
         View rootView = inflater.inflate(R.layout.view_page,container,false);
 
@@ -72,6 +73,7 @@ public class ViewFragment extends Fragment implements View.OnClickListener{
 //        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
 
 //        dbManager.closeDB();
+        db.close();
         return rootView;
     }
 
@@ -97,24 +99,9 @@ public class ViewFragment extends Fragment implements View.OnClickListener{
     public void onResume() {
 //        diaryItemList = dbManager.getDiaryItemList(diaryItemList);
 //        diaryItemList.add(new diaryItem(0,"在中山的一天","2018-11-01 11:15"));
-        recycleAdapter.notifyDataSetChanged();
+//        recycleAdapter.notifyDataSetChanged();
 
         super.onResume();
     }
 
-    @Override
-    public void onClick(View v) {
-//        switch (v.getId()){
-//            case R.id.add:
-////                add.setText("test:add");
-//                recycleAdapter.add(list.size());
-//                break;
-//            case R.id.delete:
-////                delete.setText("test:delete");
-//                recycleAdapter.delete(list.size()-1);
-//                break;
-//            default:
-//                break;
-//        }
-    }
 }

@@ -8,7 +8,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.SparseArray;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -26,7 +29,7 @@ import info.hoang8f.android.segmented.SegmentedGroup;
 public class MainActivity extends FragmentActivity implements RadioGroup.OnCheckedChangeListener{
     private SegmentedGroup topbar;
 
-    private ViewPager myViewPager;
+    private static ViewPager myViewPager;
     private TextView topbar_title;
     private RadioButton topbar_view, topbar_diary, topbar_memo, topbar_settings;
     private ScreenSlidePagerAdapter mPagerAdapter;
@@ -57,6 +60,23 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
 //        dbManager = new DBManager(db);
 
         SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase("data/user/0/com.jojo.diary/mydiary.db",null);
+
+//        LayoutInflater layoutInflater = LayoutInflater.from(this);
+//        View view = layoutInflater.inflate(R.layout.settings_page, null);
+//        Button But_diaryList = (Button)view.findViewById(R.id.But_diaryList);
+//        But_diaryList.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                gotoPage(1);
+//            }});
+//
+//        Button But_memoList = (Button)view.findViewById(R.id.But_memoList);
+//        But_diaryList.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                gotoPage(2);
+//            }});
+
     }
 
     public void initButton(){
@@ -68,7 +88,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         topbar_settings = (RadioButton)findViewById(R.id.topbar_settings);
     }
 
-    private void gotoPage(int position) {
+    public static void gotoPage(int position) {
         myViewPager.setCurrentItem(position);
     }
 
