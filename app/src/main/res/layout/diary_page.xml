@@ -163,41 +163,6 @@
                         android:src="@drawable/ic_music_blue"
                         android:visibility="visible" />
 
-                    <!--// 天气-->
-                    <!--<RelativeLayout-->
-                        <!--android:id="@+id/RL_diary_weather"-->
-                        <!--android:layout_width="0dp"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_marginLeft="0dp"-->
-                        <!--android:layout_weight="0.15"-->
-                        <!--android:visibility="visible">-->
-                        <!--<Spinner-->
-                        <!--android:id="@+id/SP_diary_weather"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:background="@null"-->
-                        <!--android:gravity="center" />-->
-                    <!--</RelativeLayout>-->
-
-                    <!--// 心情-->
-                    <!--<RelativeLayout-->
-                        <!--android:id="@+id/RL_diary_mood"-->
-                        <!--android:layout_width="3dp"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_marginLeft="2dp"-->
-                        <!--android:layout_weight="0.15">-->
-
-                        <!--<Spinner-->
-                            <!--android:id="@+id/SP_diary_mood"-->
-                            <!--android:layout_width="match_parent"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:layout_alignParentStart="true"-->
-                            <!--android:layout_alignParentLeft="true"-->
-                            <!--android:layout_marginStart="0dp"-->
-                            <!--android:layout_marginLeft="0dp"-->
-                            <!--android:background="@color/themeColor"-->
-                            <!--android:gravity="center" />-->
-                    <!--</RelativeLayout>-->
 
                 </LinearLayout>
 
@@ -219,7 +184,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:hint="@string/diary_content_hint"
-                            android:gravity="left|top"/>
+                            android:gravity="left|top"
+                            android:textColorHint="@color/edittext_hint"/>
 
                     </LinearLayout>
 

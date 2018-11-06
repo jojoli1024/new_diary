@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.jojo.diary.R;
 import com.jojo.diary.TimeTools;
 import com.jojo.diary.db.DBManager;
+import com.jojo.diary.db.DBhelper;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -45,17 +46,18 @@ public class dialog_diaryFragment extends DialogFragment implements View.OnClick
     private static long diaryId;
     private static boolean isEditMode;
     private SQLiteDatabase db;
+    private DBhelper  dBhelper;
     private DBManager dbManager;
 
     private MediaPlayer myPlayer;
     private TimeTools timeTools;
 
-    private LinearLayout dialog_LL_diary_setDate;
     private EditText dialog_EDT_diary_title, dialog_EDT_diary_content;
     private ImageView dialog_IV_diary_save;
     private String reTitle,reContent,reDate;
     private static int index;
 
+    //实例化dialog_diary的接口，并获得点击item的position，是否可编辑
     public static dialog_diaryFragment newInstance(int position,long Id,boolean EditMode){
         index = position;
         Bundle args = new Bundle();
@@ -74,8 +76,8 @@ public class dialog_diaryFragment extends DialogFragment implements View.OnClick
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-//        myPlayer= new MediaPlayer();
-        //权限判断，如果没有权限就请求权限
+
+        //音乐播放获得SDCard的权限判断，如果没有权限就请求权限
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         } else {
@@ -92,12 +94,15 @@ public class dialog_diaryFragment extends DialogFragment implements View.OnClick
         return super.onCreateDialog(savedInstanceState);
     }
 
+    //初始化dialogFragment及其组件
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        this.getDialog().setCanceledOnTouchOutside(false);
-        View rootView = inflater.inflate(R.layout.dialog_diary_page,container,false);
+        dBhelper = new DBhelper(getActivity());
+        db = dBhelper.getWritableDatabase();
+        dbManager = new DBManager(db);
 
+        View rootView = inflater.inflate(R.layout.dialog_diary_page,container,false);
 
         dialog_TV_diary_month = (TextView) rootView.findViewById(R.id.dialog_TV_diary_month);
         dialog_TV_diary_date = (TextView) rootView.findViewById(R.id.dialog_TV_diary_date);
@@ -119,23 +124,22 @@ public class dialog_diaryFragment extends DialogFragment implements View.OnClick
         IV_music_puase = (ImageView) rootView.findViewById(R.id.IV_music_puase);
         IV_music_puase.setOnClickListener(this);
 
-//        initView(rootView);
+        //设置dialog的样式
         getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        db = SQLiteDatabase.openOrCreateDatabase("/data/user/0/com.jojo.diary/databases/mydiary.db",null);
-        dbManager = new DBManager(db);
-
         dialog_EDT_diary_content = (EditText)rootView.findViewById(R.id.dialog_EDT_diary_content);
         dialog_EDT_diary_title = (EditText)rootView.findViewById(R.id.dialog_EDT_diary_title);
-        dialog_LL_diary_setDate = (LinearLayout)rootView.findViewById(R.id.dialog_LL_diary_setDate);
+
         dialog_IV_diary_save = (ImageView)rootView.findViewById(R.id.dialog_IV_diary_save);
         dialog_IV_diary_save.setOnClickListener(this);
 
+        //编辑模式切换为可编辑的组件
         if(isEditMode){
             dialog_EDT_diary_content.setVisibility(View.VISIBLE);
             dialog_EDT_diary_title.setVisibility(View.VISIBLE);
             dialog_IV_diary_save.setVisibility(View.VISIBLE);
+            dialog_IV_diary_delete.setVisibility(View.VISIBLE);
 
             dialog_TV_diary_title.setVisibility(View.GONE);
             dialog_TV_diary_content.setVisibility(View.GONE);
@@ -144,61 +148,53 @@ public class dialog_diaryFragment extends DialogFragment implements View.OnClick
         return rootView;
     }
 
+    //初始化dialog的数据
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //还需要获得position id
-        //
+
+        //从数据库中获取点击item的对应dairy
+        diaryItem diaryItem = dbManager.getDiaryItem(diaryId);
+//        Log.e("diary获得的diaryId",String.valueOf(diaryId));
+
+        //日记创建的时间
         Date createDate;
         Calendar calendar=Calendar.getInstance();;
         String date, month , day , time, title, content;
-
-//        dbManager.openDB();
-
-        diaryItem diaryItem = dbManager.getDiaryItem(diaryId);
-        Log.e("diary获得的diaryId",String.valueOf(diaryId));
-
         createDate = diaryItem.getCreateDate();
         calendar.setTime(createDate);
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-
         date = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
-        Log.e("月份",""+calendar.get(Calendar.MONTH));
-
-        Log.e("timeTools",timeTools.getMonths().length+"");
+//        Log.e("月份",""+calendar.get(Calendar.MONTH));
+//        Log.e("timeTools",timeTools.getMonths().length+"");
         month = timeTools.getMonths()[calendar.get(Calendar.MONTH)];
         day = timeTools.getDays()[calendar.get(Calendar.DAY_OF_WEEK) - 1];
         time = sdf.format(calendar.getTime());
 
+        //日记的内容及标题
         title = diaryItem.getTitle();
         content = diaryItem.getSummary();
 
         dialog_TV_diary_date.setText(date);
-
         dialog_TV_diary_month.setText(month);
-
         dialog_TV_diary_day.setText(day);
-
         dialog_TV_diary_time.setText(time);
 
         dialog_TV_diary_title.setText(title);
-
         dialog_EDT_diary_title.setText(title);
 
         dialog_TV_diary_content.setText(content);
-
         dialog_EDT_diary_content.setText(content);
 
         sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         reDate = sdf.format(calendar.getTime());
 
-//        dbManager.closeDB();
-//        initData();
+        db.close();
     }
 
     public void onStart() {
         super.onStart();
-        //Modify dialog size
+        //修改dialog的尺寸
         Dialog dialog = getDialog();
         if (dialog != null) {
             DisplayMetrics dm = new DisplayMetrics();
@@ -207,6 +203,7 @@ public class dialog_diaryFragment extends DialogFragment implements View.OnClick
         }
     }
 
+    //初始化音乐播放器
     public void initMediaPlayer(){
 //        try{
 //            myPlayer = new MediaPlayer();
@@ -272,6 +269,7 @@ public class dialog_diaryFragment extends DialogFragment implements View.OnClick
 
     }
 
+    //音乐播放器销毁
     public void onDestroy() {
         super.onDestroy();
         if(myPlayer != null){
@@ -280,12 +278,14 @@ public class dialog_diaryFragment extends DialogFragment implements View.OnClick
         }
     }
 
+    //删除该日记的操作
     private void deleteDiary(long diaryId){
         dbManager.delDiary(diaryId);
-
+        //刷新界面
         ViewFragment.recycleAdapter.delete(index);
-//        ViewFragment.diaryItemList.remove((int)diaryId);
     }
+
+    //编辑该日记，并update至数据库DBdiary中
     private void rewriteDiary(long diaryId){
         reTitle = dialog_EDT_diary_title.getText().toString();
         reContent = dialog_EDT_diary_content.getText().toString();
@@ -296,12 +296,7 @@ public class dialog_diaryFragment extends DialogFragment implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.IV_music_play:
-//                IV_music_play.setVisibility(View.INVISIBLE);
-//                IV_music_puase.setVisibility(View.VISIBLE);
-//                Toast.makeText(getActivity(),"你点了music_play", Toast.LENGTH_SHORT).show();
-
-//                myPlayer.start();
-
+                //播放音乐
                 if(myPlayer!=null && !myPlayer.isPlaying()){
                     try {
                         myPlayer.prepare();
@@ -309,7 +304,6 @@ public class dialog_diaryFragment extends DialogFragment implements View.OnClick
                         Toast.makeText(getActivity(),"myPlayer doesn't prepare !", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
-
                     myPlayer.start();
                     Toast.makeText(getActivity(),"myPlayer start!", Toast.LENGTH_SHORT).show();
                 }
@@ -322,12 +316,7 @@ public class dialog_diaryFragment extends DialogFragment implements View.OnClick
 
                 break;
             case R.id.IV_music_puase:
-//                IV_music_puase.setVisibility(View.INVISIBLE);
-//                IV_music_play.setVisibility(View.INVISIBLE);
-//                Toast.makeText(getActivity(),"你点了music_puase", Toast.LENGTH_SHORT).show();
-
-//                myPlayer.pause();
-
+                //暂停音乐
                 if(myPlayer!=null && myPlayer.isPlaying()){
                     myPlayer.pause();
                     Toast.makeText(getActivity(),"myPlayer pause!", Toast.LENGTH_SHORT).show();
@@ -340,18 +329,27 @@ public class dialog_diaryFragment extends DialogFragment implements View.OnClick
                 }
                 break;
             case R.id.IV_diary_close_dialog:
+                //关闭dialog窗口
                 onDestroy();
                 dismiss();
                 break;
             case R.id.dialog_IV_diary_delete:
-                deleteDiary(diaryId);
-                db.close();
+                //编辑模式下删除日记
+                if(isEditMode){
+                    deleteDiary(diaryId);
+                    db.close();
+                }
                 break;
             case R.id.dialog_IV_diary_save:
-                Toast.makeText(getActivity(),"save！",Toast.LENGTH_SHORT).show();
-                rewriteDiary(diaryId);
+                //编辑模式下保存日记
+                if(isEditMode){
+                    Toast.makeText(getActivity(),"save！",Toast.LENGTH_SHORT).show();
+                    rewriteDiary(diaryId);
+                    db.close();
+                }
                 break;
             default:
+                dbManager.closeDB();
                 break;
         }
     }

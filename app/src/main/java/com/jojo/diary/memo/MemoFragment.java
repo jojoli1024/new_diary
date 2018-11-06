@@ -1,6 +1,5 @@
 package com.jojo.diary.memo;
 
-import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -25,7 +24,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -34,17 +32,12 @@ import android.widget.Toast;
 import com.jojo.diary.R;
 import com.jojo.diary.db.DBManager;
 import com.jojo.diary.db.DBhelper;
-import com.jojo.diary.main.MainActivity;
-import com.jojo.diary.view.diaryItem;
-import com.jojo.diary.view.recycleAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import static android.content.Context.ALARM_SERVICE;
 
 public class MemoFragment extends Fragment implements View.OnClickListener{
     private Button But_edit_memo_cancel,But_edit_memo_ok;
@@ -55,7 +48,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     private Calendar calendar;
     private SimpleDateFormat simpleDateFormat;
 
-    private String info,date;
+    private String memoInfo, memoDate;
 
     private DBhelper dBhelper;
 
@@ -66,22 +59,17 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     private SQLiteDatabase db;
     private DBManager dbManager;
 
-    private Notification notification;
-    private NotificationManager manager;
-    private PendingIntent pendingIntent;
-    private AlarmManager alarmManager;
     private long time;
 
-
-
-    private int year,month,day,hour,minute;
-
+    //初始化界面的各项组件，并为RecycleView_memoR配置其适配器
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        //初始化数据库接口
         dBhelper = new DBhelper(getActivity());
         db = dBhelper.getWritableDatabase();
         dbManager = new DBManager(db);
 
+        //获得所有memo
         memoItemList = new ArrayList<memoItem>();
         memoItemList = dbManager.getMemoItemList(memoItemList);
 
@@ -95,10 +83,6 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         EDT_edit_memo_info = (EditText)rootView.findViewById(R.id.EDT_edit_memo_content);
         EDT_edit_memo_info.setOnClickListener(this);
 
-
-//        IV_diary_save = (ImageView)rootView.findViewById(R.id.IV_diary_save);
-//        IV_diary_save.setOnClickListener(this);
-
         memo_page_add_calendar = (RelativeLayout)rootView.findViewById(R.id.RL_date_time_picker);
         memo_page_add_calendar.setOnClickListener(this);
 
@@ -109,18 +93,22 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
 
         setCurrentTime();
 
+        //初始化RecycleView_memoR并配置其适配器
         recyclerView = (RecyclerView)rootView.findViewById(R.id.RecyclerView_memo);
         memo_recycleAdapter = new memo_recycleAdapter(this,memoItemList);
         recyclerView.setAdapter(memo_recycleAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         memo_recycleAdapter.setOnItemClickListener(MyItemClickListener);
+
         return rootView;
     }
 
+    //设置当前时间
     private void setCurrentTime() {
         simpleDateFormat = new SimpleDateFormat("HH:mm");
         calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
+
         String md = "";
         md += calendar.get(Calendar.MONTH)+1;
         md += "-" + calendar.get(Calendar.DAY_OF_MONTH);
@@ -139,12 +127,12 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
             Toast.makeText(getActivity(),hs + "hs is null !", Toast.LENGTH_SHORT).show();
         }
 
-        date = "" + (calendar.get(Calendar.MONTH)+1) + "-" +
+        //待插入memo的memoDate时间
+        memoDate = "" + (calendar.get(Calendar.MONTH)+1) + "-" +
                 calendar.get(Calendar.DAY_OF_MONTH) + " " +
                 calendar.get(Calendar.HOUR_OF_DAY) + ":" +
                 calendar.get(Calendar.MINUTE);
 
-//        setAlarm(md + " " + hs);
     }
 
     @Override
@@ -152,35 +140,23 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         super.onCreate(savedInstanceState);
 //        setCurrentTime(); 不能放这里？
     }
+
+    //设置定时提醒功能
     private void setAlarm(String Sdate,String memoInfo) {
+        //将获得是的时间由String转为long型
         simpleDateFormat = new SimpleDateFormat("MM-dd HH:mm");
-//        calendar = Calendar.getInstance();
         Date Ddate = null;
         try {
             Ddate = simpleDateFormat.parse(Sdate);
         } catch (Exception e) {
             Toast.makeText(getActivity(), "设置提醒失败", Toast.LENGTH_SHORT).show();
         }
-        time = dateToLong(Ddate);
-//        calendar.setTimeInMillis(time);
-//        Log.e("alarm time",""+time);
-//        Log.e("alarm calendar",""+calendar.getTimeInMillis());
-        String info = memoInfo;
-////        Intent intent = new Intent(getContext(), AlarmReceiver.class);
-////        intent.setAction("VIDEO_TIMER");
-////        PendingIntent sender = PendingIntent.getBroadcast(getContext(), 0, intent, 0);
-////        alarmManager = (AlarmManager) getContext().getSystemService(ALARM_SERVICE);
-////        alarmManager.set(AlarmManager.RTC_WAKEUP, time, sender);
-////        manager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-////        manager.cancel(1023);
-////        notification = new Notification();
-////        notification.icon = R.drawable.ic_mood_happy;
-////        notification.tickerText = "备忘录：";
-////        notification.setLatestEventInfo
+        time = Ddate.getTime();
 
         NotificationManager manager = (NotificationManager) getContext()
                 .getSystemService(Context.NOTIFICATION_SERVICE);
 
+        //android8.0版本及以上，必须设置NotificationChannel！！
         NotificationChannel channel = new NotificationChannel("chanel_id","channel_name",NotificationManager.IMPORTANCE_DEFAULT);
         channel.enableVibration(true);
         channel.enableLights(true);
@@ -191,70 +167,44 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
                 new Intent(getContext(),MemoFragment.class),0);
         builder.setSmallIcon(R.drawable.ic_mood_happy)
                 .setContentTitle("备忘录:")
-                .setContentText(info)
+                .setContentText(memoInfo)
                 .setChannelId("chanel_id")
-                .setWhen(time)
+                .setWhen(time)                          //延迟时间效果不佳，待修改
                 .setContentIntent(pendingIntent)
                 .setDefaults(Notification.DEFAULT_VIBRATE)
                 .setVibrate(new long[] {0,300,500,700});//实现效果：延迟0ms，然后振动300ms。在延迟500ms，接着在振动700ms
         Notification notification = builder.build();
         notification.flags |= Notification.FLAG_INSISTENT;//让声音、振动无限循环，直到用户响应 （取消或者打开）
 
-        final Handler handler = new Handler();
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                handler.postDelayed(this,time);
-            }
-        };
         manager.notify(1, notification);
 
-//        Intent intent = new Intent(getActivity(),AlarmReceiver.class);
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(),0,intent,0);
-//        AlarmManager alarmManager = (AlarmManager)getContext().getSystemService(ALARM_SERVICE);
-//        alarmManager.set(AlarmManager.RTC_WAKEUP,time,pendingIntent);
-
-
-//        Notification notify = new Notification.Builder(getContext())
-//                .setSmallIcon(R.drawable.ic_mood_happy)
-//                .setContentTitle("备忘录:")
-//                .setContentText("memoInfo")
-//                .setContentIntent(pendingIntent).setNumber(1).getNotification();
-//        notify.flags |= Notification.FLAG_AUTO_CANCEL;
-
-//        manager.notify(1, notify);
-
     }
 
-    public static long dateToLong(Date date) {
-        return date.getTime();
-    }
     @Override
     public void onClick(View v) {
-
-
         switch (v.getId()){
+            //清空所有输入
             case R.id.But_edit_memo_cancel:
 //                But_edit_memo_cancel.setText("test");
                 EDT_edit_memo_info.setText("");
                 break;
+
+            //保存该memo至数据库中，并清空输入
             case R.id.But_edit_memo_ok:
                 saveMemo(dbManager);
                 EDT_edit_memo_info.setText("");
-
-                break;
-            case R.id.EDT_edit_memo_content:
                 break;
 
+            //选择备忘录的时间，初始化TimePickerDialog、DatePickerDialog
             case R.id.RL_date_time_picker:
-//                Toast.makeText(getActivity(),"calendar successfully!!", Toast.LENGTH_SHORT).show();
                 calendar.getInstance();
+                //获得用户选择的时间日期
                 new TimePickerDialog(getActivity(),R.style.ThemeDialog,
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                                 String hs = " "+hourOfDay+":"+minute;
-                                date += hs;
+                                memoDate += hs;
                                 TV_hs.setText(hs);
                             }
                         },calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),true).show();
@@ -264,12 +214,12 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
                             @Override
                             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                                 String md = ""+(month+1)+"-"+dayOfMonth;
-                                date = md;
+                                memoDate = md;
                                 TV_md.setText(md);
                             }
                         },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
 
-                Log.e("memo time",""+calendar.toString());
+//                Log.e("memo time",""+calendar.toString());
 
                 break;
             default:
@@ -277,42 +227,33 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
         }
     }
 
+    //保存数据至DBmemo中，并设置定时提醒
     private void saveMemo(DBManager dbManager){
-        info = EDT_edit_memo_info.getText().toString();
+        //插入至表DBmemo中
+        memoInfo = EDT_edit_memo_info.getText().toString();
+        dbManager.insertMemo(memoDate, memoInfo);
 
-//        date = "" + (calendar.get(Calendar.MONTH)+1) + "-" +
-//                calendar.get(Calendar.DAY_OF_MONTH) + " " +
-//                calendar.get(Calendar.HOUR_OF_DAY) + ":" +
-//                calendar.get(Calendar.MINUTE);
-
-        dbManager.insertMemo(date, info);
-
-        memoItem item = new memoItem(memoItemList.size(),date,info);
-//        Log.e("memoItemList.size()",""+memoItemList.size());
+        //刷新界面
+        memoItem item = new memoItem(memoItemList.size(), memoDate, memoInfo);
         memoItemList.add(item);
-//        memoItemList = new ArrayList<memoItem>();
-//        memoItemList = dbManager.getMemoItemList(memoItemList);
-//Log.e("memolist size",""+memoItemList.size());
         memo_recycleAdapter.add(memoItemList.size());
 
-        setAlarm(date,info);
-
-//        db.close();
+        //设置备忘录的定时提醒
+        setAlarm(memoDate, memoInfo);
     }
 
-    /**
-     * item＋item里的控件点击监听事件
-     */
+    //为recycleView中的每个item设置删除memo的响应
     private memo_recycleAdapter.OnItemClickListener MyItemClickListener = new memo_recycleAdapter.OnItemClickListener() {
         @Override
         public void onItemClick(View v, int position) {
             switch (v.getId()) {
                 case R.id.IV_memo_item_delete:
+                    //从表DBmemo中删除
                     dbManager.delMemo(memoItemList.get(position).getMemoId());
+                    //刷新界面
                     memoItemList.remove(position);
                     memo_recycleAdapter.delete(position);
                     Toast.makeText(getActivity(), "删除memo", Toast.LENGTH_SHORT).show();
-                    memo_recycleAdapter.delete(position);
                     break;
                 default:
                     db.close();

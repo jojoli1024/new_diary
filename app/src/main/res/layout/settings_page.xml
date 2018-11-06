@@ -44,18 +44,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <Button
-            android:id="@+id/But_settings"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical|left"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:text="修改用户信息"
-            android:textSize="15dp"
-            android:paddingLeft="10dp"
-            android:background="@android:color/white"
-            android:drawableRight="@drawable/arrow"/>
 
         <Button
             android:id="@+id/But_diaryList"
@@ -78,19 +66,6 @@
             android:layout_marginTop="10dp"
             android:layout_marginLeft="10dp"
             android:text="我的备忘录"
-            android:textSize="15dp"
-            android:paddingLeft="10dp"
-            android:background="#FFFF"
-            android:drawableRight="@drawable/arrow"/>
-
-        <Button
-            android:id="@+id/But_musicList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical|left"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:text="我的音乐"
             android:textSize="15dp"
             android:paddingLeft="10dp"
             android:background="#FFFF"

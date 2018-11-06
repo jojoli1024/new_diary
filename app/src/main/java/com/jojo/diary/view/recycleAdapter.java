@@ -19,18 +19,11 @@ import java.util.List;
 
 public class recycleAdapter extends RecyclerView.Adapter<recycleAdapter.MyViewHolder> {
 
-//    public enum item_type{
-//        item1,
-//        item2;
-//    }
-
+    //初始化item的各个组件
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener{
 
         private TextView TV_diary_item_day,TV_diary_item_month;
         private TextView TV_diary_item_time,TV_diary_item_title,TV_diary_item_summary;
-//        private ImageView IV_diary_item_weather,IV_diary_item_mood;
-
-//        TextView title;
 
         public MyViewHolder(View view) {
             super(view);
@@ -39,28 +32,23 @@ public class recycleAdapter extends RecyclerView.Adapter<recycleAdapter.MyViewHo
             TV_diary_item_time=(TextView)view.findViewById(R.id.TV_diary_item_time);
             TV_diary_item_title=(TextView)view.findViewById(R.id.TV_diary_item_title);
             TV_diary_item_summary=(TextView)view.findViewById(R.id.TV_diary_item_summary);
-//            IV_diary_item_weather=(ImageView)view.findViewById(R.id.IV_diary_item_weather);
-//            IV_diary_item_mood=(ImageView)view.findViewById(R.id.IV_diary_item_mood);
-
-//            title = (TextView)view.findViewById(R.id.title);
 
             this.itemView.setOnClickListener(this);
             this.itemView.setOnLongClickListener(this);
         }
 
+        //单价item浏览日记
         @Override
         public void onClick(View v) {
             //打开一个日记浏览模式
-//            v.findViewById(R.layout.dialog_diary_page);
             boolean isEditMode = false;
             dialog_diaryFragment dialog_diary= dialog_diaryFragment.newInstance(getAdapterPosition(),diaryItemList.get(getAdapterPosition()).getId(),
                     isEditMode);
             dialog_diary.setTargetFragment(viewFragment,0);
             dialog_diary.show(viewFragment.getFragmentManager(),"dialog_diary");
-//            dialog_diary.show();
-//            TV_diary_item_summary.setText("你点击了onClick！");
         }
 
+        //长按item编辑日记
         @Override
         public boolean onLongClick(View v) {
             //长按编辑日记
@@ -69,27 +57,21 @@ public class recycleAdapter extends RecyclerView.Adapter<recycleAdapter.MyViewHo
                     isEditMode);
             dialog_diary.setTargetFragment(viewFragment,0);
             dialog_diary.show(viewFragment.getFragmentManager(),"dialog_diary");
-
-//            TV_diary_item_summary.setText("你点击了onLongClick！");
             return true;
         }
     }
+
     private List<diaryItem> diaryItemList;
     private ViewFragment viewFragment;
 
+    //获得、初始化数据
     public recycleAdapter(ViewFragment viewFragment,List<diaryItem> diaryItemList){
         this.viewFragment=viewFragment;
         this.diaryItemList=diaryItemList;
-//        notifyDataSetChanged();
+
     }
 
-//    private List<String> list;
-//
-//    public recycleAdapter(List<String> list){
-//        this.list=list;
-//
-//    }
-
+    //设置item样式
     @Override
     public MyViewHolder onCreateViewHolder( ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.diary_item,parent,false);
@@ -97,6 +79,7 @@ public class recycleAdapter extends RecyclerView.Adapter<recycleAdapter.MyViewHo
         return holder;
     }
 
+    //为每个item初始化数据，填充内容
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int position) {
         Date date = diaryItemList.get(position).getCreateDate();
@@ -105,25 +88,16 @@ public class recycleAdapter extends RecyclerView.Adapter<recycleAdapter.MyViewHo
         String day=calendar.get(Calendar.DAY_OF_MONTH)+"";
         String month=(calendar.get(Calendar.MONTH) +1) +"";
         String time=String.valueOf(new SimpleDateFormat("HH:mm").format(calendar.getTime()));
-//        Calendar.HOUR_OF_DAY)+":"+calendar.get(Calendar.MINUTE)+":"+calendar.get(Calendar.SECOND);
+
         myViewHolder.TV_diary_item_day.setText(day);
         myViewHolder.TV_diary_item_month.setText(month);
         myViewHolder.TV_diary_item_time.setText(time);
-//
+
         String title=diaryItemList.get(position).getTitle();
         myViewHolder.TV_diary_item_title.setText(title);
 
         String summary=diaryItemList.get(position).getSummary();
         myViewHolder.TV_diary_item_summary.setText(summary);
-
-//        int weather=diaryItemList.get(position).getWeatherId();
-//        myViewHolder.IV_diary_item_weather.setImageResource(weather);
-//
-//        int mood=diaryItemList.get(position).getMoodId();
-//        myViewHolder.IV_diary_item_weather.setImageResource(mood);
-
-//        myViewHolder.title.setText(list.get(position));
-
     }
 
     @Override
@@ -131,8 +105,7 @@ public class recycleAdapter extends RecyclerView.Adapter<recycleAdapter.MyViewHo
         return diaryItemList.size();
     }
 
-//    static int position=list.size();
-
+    ////对外开放的添加、删除的动画效果
     public void add(diaryItem item,int position){
         diaryItemList.add(item);
         notifyItemInserted(position);

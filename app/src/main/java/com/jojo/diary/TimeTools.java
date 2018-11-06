@@ -2,10 +2,7 @@ package com.jojo.diary;
 
 import android.content.Context;
 
-/**
- * Created by daxia on 2016/10/27.
- */
-
+//获得英文名的月份、星期
 public class TimeTools {
 
     private String[] monthsFullName;

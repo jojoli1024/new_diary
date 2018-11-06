@@ -12,8 +12,11 @@ import android.widget.Button;
 import com.jojo.diary.R;
 import com.jojo.diary.main.MainActivity;
 
+//初始化界面并设置ViewPager页面的跳转
 public class SettingsFragment extends Fragment implements View.OnClickListener{
     private Button But_diaryList, But_memoList;
+
+    //初始化界面
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.settings_page,container,false);
 
@@ -24,6 +27,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener{
         return rootView;
     }
 
+    //设置ViewPager页面的跳转
     @Override
     public void onClick(View v) {
         switch(v.getId()){

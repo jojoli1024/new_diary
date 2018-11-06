@@ -20,12 +20,14 @@ import java.util.List;
 
 public class memo_recycleAdapter extends RecyclerView.Adapter<memo_recycleAdapter.MyViewHolder> {
 
+    //对外开放item的组件操作
     public interface OnItemClickListener  {
         void onItemClick(View v, int position);
     }
 
     public OnItemClickListener mOnItemClickListener;
 
+    //设置item的监听
     public void setOnItemClickListener(OnItemClickListener  listener) {
         this.mOnItemClickListener  = listener;
     }
@@ -34,9 +36,6 @@ public class memo_recycleAdapter extends RecyclerView.Adapter<memo_recycleAdapte
 
         private ImageView IV_memo_item_delete;
         private TextView TV_memo_item_info;
-        private long memoId;
-        private SQLiteDatabase db;
-        private DBManager dbManager;
 
         public MyViewHolder(View view) {
             super(view);
@@ -49,19 +48,9 @@ public class memo_recycleAdapter extends RecyclerView.Adapter<memo_recycleAdapte
 
         @Override
         public void onClick(View v) {
-
             if (mOnItemClickListener != null) {
                 mOnItemClickListener.onItemClick(v, getAdapterPosition());
             }
-
-//            if(v.getId() == R.id.IV_memo_item_delete){
-//                //删除memo
-//                memoId = memoItemList.get(getAdapterPosition()).getMemoId();
-//
-//                db = SQLiteDatabase.openOrCreateDatabase("/data/user/0/com.jojo.diary/databases/mydiary.db",null);
-//                dbManager = new DBManager(db);
-//                dbManager.delMemo(memoId);
-//            }
         }
     }
 
@@ -73,6 +62,7 @@ public class memo_recycleAdapter extends RecyclerView.Adapter<memo_recycleAdapte
         this.memoItemList=memoItemList;
     }
 
+    //配置item的界面
     public memo_recycleAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.memo_item,parent,false);
         memo_recycleAdapter.MyViewHolder holder = new memo_recycleAdapter.MyViewHolder(view);
@@ -84,12 +74,14 @@ public class memo_recycleAdapter extends RecyclerView.Adapter<memo_recycleAdapte
         return memoItemList.size();
     }
 
+    //填充item的内容
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int position) {
         memoItem item = memoItemList.get(position);
         myViewHolder.TV_memo_item_info.setText(item.getInfo());
     }
 
+    //对外开放的添加、删除的动画效果
     public void add(int position){
         notifyItemInserted(position);
     }

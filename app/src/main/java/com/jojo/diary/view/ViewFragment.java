@@ -23,8 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ViewFragment extends Fragment {
-//    private Button add;
-//    private Button delete;
+
     private RecyclerView recyclerView;
     public static recycleAdapter recycleAdapter;
     public static List<diaryItem> diaryItemList;
@@ -33,78 +32,35 @@ public class ViewFragment extends Fragment {
     private SQLiteDatabase db;
     private DBManager dbManager;
 
-//    private List<String> list;
-
-
+    //初始化界面与组件
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        "/data/user/0/com.jojo.diary/databases/mydiary.db"
+        //调用数据库
         dBhelper = new DBhelper(getActivity());
-        SQLiteDatabase db = dBhelper.getWritableDatabase();
-//        db = SQLiteDatabase.openOrCreateDatabase("/data/user/0/com.jojo.diary/databases/mydiary.db",null);
+        db = dBhelper.getWritableDatabase();
         dbManager = new DBManager(db);
-//        dbManager.openDB();
 
+        //从数据库DBdiary表中获得所有diary数据
         diaryItemList = new ArrayList<diaryItem>();
         diaryItemList = dbManager.getDiaryItemList(diaryItemList);
-//        diaryItemList.add(new diaryItem(0,"在中山的一天","2018-11-01 11:15"));
 
+        //设置界面样式
         View rootView = inflater.inflate(R.layout.view_page,container,false);
 
-//        diaryItemList.add(new diaryItem(1,"再见吧bug","2018-11-04 09:50"));
-        //时间需要重新弄过！！！！！
-
-//        diaryItemList.add(new diaryItem(0,"在中山的一天"));
-//        diaryItemList.add(new diaryItem(1,"再见吧bug"));
-//        list =new ArrayList<String>();
-//        for(int i=0;i<10;i++){
-//            list.add("add:"+i);
-//        }
-
-
-//        add = (Button)rootView.findViewById(R.id.add);
-//        add.setOnClickListener(this);
-//        delete = (Button)rootView.findViewById(R.id.delete);
-//        delete.setOnClickListener(this);
-
+        //初始化RecycleView和设置其适配器
         recyclerView = (RecyclerView)rootView.findViewById(R.id.RecyclerView_diary);
         recycleAdapter = new recycleAdapter(this,diaryItemList);
         recyclerView.setAdapter(recycleAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
 
-//        dbManager.closeDB();
         db.close();
         return rootView;
     }
 
-//    public recycleAdapter getRecycleAdapter(){
-//        return recycleAdapter;
-//    }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
-    public void onStart() {
-
-//        diaryItemList = dbManager.getDiaryItemList(diaryItemList);
-//        diaryItemList.add(new diaryItem(0,"在中山的一天","2018-11-01 11:15"));
-
-        super.onStart();
-    }
-
-    @Override
-    public void onResume() {
-//        diaryItemList = dbManager.getDiaryItemList(diaryItemList);
-//        diaryItemList.add(new diaryItem(0,"在中山的一天","2018-11-01 11:15"));
-//        recycleAdapter.notifyDataSetChanged();
-
-        super.onResume();
     }
 
 }
