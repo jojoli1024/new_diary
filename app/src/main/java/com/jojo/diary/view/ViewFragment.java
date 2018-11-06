@@ -29,6 +29,7 @@ public class ViewFragment extends Fragment {
     public static recycleAdapter recycleAdapter;
     public static List<diaryItem> diaryItemList;
 
+    private DBhelper dBhelper;
     private SQLiteDatabase db;
     private DBManager dbManager;
 
@@ -39,7 +40,9 @@ public class ViewFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 //        "/data/user/0/com.jojo.diary/databases/mydiary.db"
-        db = SQLiteDatabase.openOrCreateDatabase("/data/user/0/com.jojo.diary/databases/mydiary.db",null);
+        dBhelper = new DBhelper(getActivity());
+        SQLiteDatabase db = dBhelper.getWritableDatabase();
+//        db = SQLiteDatabase.openOrCreateDatabase("/data/user/0/com.jojo.diary/databases/mydiary.db",null);
         dbManager = new DBManager(db);
 //        dbManager.openDB();
 

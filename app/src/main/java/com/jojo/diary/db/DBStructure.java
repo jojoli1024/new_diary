@@ -3,6 +3,7 @@ package com.jojo.diary.db;
 import android.provider.BaseColumns;
 
 public class DBStructure {
+    //DBdiary表的结构
     public static abstract class DBdiary implements BaseColumns{
         public static final String TABLE_NAME = "DBdiary";
         public static final String COLUMN_DATE = "diaryDate";
@@ -10,6 +11,7 @@ public class DBStructure {
         public static final String COLUMN_CONTENT = "diaryContent";
     }
 
+    //DBmemo表的结构
     public static abstract class DBmemo implements BaseColumns{
         public static final String TABLE_NAME = "DBmemo";
         public static final String COLUMN_DATE = "memoDate";

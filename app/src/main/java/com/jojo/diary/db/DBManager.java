@@ -18,8 +18,6 @@ public class DBManager {
     private SQLiteDatabase db;
     private DBhelper mDBHelper;
 
-    public DBManager(Context context) { this.context = context; }
-
     public DBManager(SQLiteDatabase db) { this.db = db; }
 
     public void openDB() throws SQLException {
@@ -28,6 +26,7 @@ public class DBManager {
     }
 
     public void closeDB() { mDBHelper.close(); }
+    //防止数据库的泄漏
 
     // Id自动生成
     // 日记：新建、更新、删除
@@ -60,6 +59,7 @@ public class DBManager {
         );
     }
 
+    //插入、编辑日记数据元组的封装
     private ContentValues createDiary(String  title, String content, String diary_date){
         ContentValues values = new ContentValues();
         values.put(DBStructure.DBdiary.COLUMN_TITLE, title);
@@ -95,6 +95,7 @@ public class DBManager {
         );
     }
 
+    //插入备忘录数据元组的封装
     private ContentValues createMemo(String date, String info){
         ContentValues values = new ContentValues();
         values.put(DBStructure.DBmemo.COLUMN_DATE, date);
@@ -102,12 +103,15 @@ public class DBManager {
         return values;
     }
 
+    //获得DBdiary中的所有数据，并打包成列表
     public List<diaryItem> getDiaryItemList(List<diaryItem> diaryItemList){
         Cursor cursor = db.query(DBStructure.DBdiary.TABLE_NAME,
                 new String[]{"_id","diaryDate","diaryTitle","diaryContent"},
                 null,null,null,null,null);
+
         long id;
         String diaryDate,diaryTitle,diaryContent;
+
         while (cursor.moveToNext()){
             id = cursor.getLong(cursor.getColumnIndex("_id"));
             diaryDate = cursor.getString(cursor.getColumnIndex("diaryDate"));
@@ -130,6 +134,7 @@ public class DBManager {
         return diaryItemList;
     }
 
+    //获得DBmemo中的所有数据，并打包成列表
     public List<memoItem> getMemoItemList(List<memoItem> memoItemList){
         Cursor cursor = db.query(DBStructure.DBmemo.TABLE_NAME,
                 new String[]{"_id","memoDate","memoInfo"},
@@ -155,6 +160,7 @@ public class DBManager {
         return memoItemList;
     }
 
+    //获得_id = memoId的memo元组
     public memoItem getMemoItem(long memoId){
         Cursor cursor = db.query(DBStructure.DBmemo.TABLE_NAME,
                 new String[]{"_id","memoDate","memoInfo"},
@@ -169,6 +175,7 @@ public class DBManager {
         return memoItem;
     }
 
+    //获得_id = diaryId的diary元组
     public diaryItem getDiaryItem(long diaryId) {
         Cursor cursor = db.query(DBStructure.DBdiary.TABLE_NAME,
                 new String[]{"_id","diaryDate","diaryTitle","diaryContent"},

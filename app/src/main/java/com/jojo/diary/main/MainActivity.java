@@ -34,11 +34,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
     private RadioButton topbar_view, topbar_diary, topbar_memo, topbar_settings;
     private ScreenSlidePagerAdapter mPagerAdapter;
 
-    private DBhelper dBhelper;
-    private DBManager dbManager;
-//    List<diaryItem> diaryItemList;
-//    private List<Fragment> fragmentList;
-
+    //ViewPager的初始化与相关4个Fragment的配置
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,31 +48,6 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
 
         gotoPage(0);
         topbar_view.setChecked(true);
-
-//        deleteDatabase("mydiary.db");
-//
-//        dBhelper = new DBhelper(MainActivity.this);
-//        SQLiteDatabase db = dBhelper.getWritableDatabase();
-//        dbManager = new DBManager(db);
-
-        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase("data/user/0/com.jojo.diary/mydiary.db",null);
-
-//        LayoutInflater layoutInflater = LayoutInflater.from(this);
-//        View view = layoutInflater.inflate(R.layout.settings_page, null);
-//        Button But_diaryList = (Button)view.findViewById(R.id.But_diaryList);
-//        But_diaryList.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                gotoPage(1);
-//            }});
-//
-//        Button But_memoList = (Button)view.findViewById(R.id.But_memoList);
-//        But_diaryList.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                gotoPage(2);
-//            }});
-
     }
 
     public void initButton(){
@@ -88,10 +59,12 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         topbar_settings = (RadioButton)findViewById(R.id.topbar_settings);
     }
 
+    //对外提供ViewPager页面跳转
     public static void gotoPage(int position) {
         myViewPager.setCurrentItem(position);
     }
 
+    //初始化ViewPager和其适配器
     private void initViewPager(){
         myViewPager = (ViewPager)findViewById(R.id.ViewPager);
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
@@ -100,6 +73,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
 
     }
 
+    //点击RadioButtun的响应，美化界面：设置标题与选中按钮
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         switch (checkedId){
@@ -125,6 +99,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         }
     }
 
+    //滑动ViewPager的响应，美化界面：设置标题与选中按钮
     private ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.SimpleOnPageChangeListener() {
         @Override
         public void onPageScrolled(int i, float v, int i1) {
@@ -160,6 +135,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         }
     };
 
+    //ViewPager的适配器，向ViewPager插入4种不同的Fragment
     private class ScreenSlidePagerAdapter extends FragmentPagerAdapter{
 
         private SparseArray<Fragment> registeredFragments =new SparseArray<Fragment>();
@@ -204,10 +180,6 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         public void destroyItem(ViewGroup container, int position, Object object) {
             registeredFragments.remove(position);
             super.destroyItem(container, position, object);
-        }
-
-        public Fragment getRegisteredFragment(int position) {
-            return registeredFragments.get(position);
         }
     }
 }

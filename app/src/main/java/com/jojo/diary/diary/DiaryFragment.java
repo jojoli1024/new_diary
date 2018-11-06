@@ -27,15 +27,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-// implements View.OnClickListener
 public class DiaryFragment extends Fragment implements View.OnClickListener {
 
     private ImageView diary_page_clear;
     private ImageView diary_page_save;
     private ImageView diary_page_add_music;
-    private RelativeLayout diary_page_add_date;
     private EditText EDT_diary_title,EDT_diary_content;
-    private DiaryItemHelper diaryItemHelper;
 
     private String title,content,date;
     private TextView TV_diary_month, TV_diary_date, TV_diary_day, TV_diary_time;
@@ -43,10 +40,9 @@ public class DiaryFragment extends Fragment implements View.OnClickListener {
     private TimeTools timeTools;
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 
-
     private DBhelper dBhelper;
-//    private SQLiteDatabase db = dBhelper.getWritableDatabase();
 
+    //初始化界面以及为相关按钮添加监听
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -62,9 +58,6 @@ public class DiaryFragment extends Fragment implements View.OnClickListener {
 
         diary_page_add_music=(ImageView) rootView.findViewById(R.id.IV_diary_music);
         diary_page_add_music.setOnClickListener(this);
-
-        diary_page_add_date = (RelativeLayout) rootView.findViewById(R.id.RL_diary_info);
-        diary_page_add_date.setOnClickListener(this);
 
         TV_diary_month = (TextView) rootView.findViewById(R.id.TV_diary_month);
         TV_diary_date = (TextView) rootView.findViewById(R.id.TV_diary_date);
@@ -82,7 +75,7 @@ public class DiaryFragment extends Fragment implements View.OnClickListener {
         return rootView;
     }
 
-
+    //初始化界面时，初始化时间为系统当前时间
     private void setCurrentTime(){
         calendar.setTimeInMillis(System.currentTimeMillis());
         TV_diary_month.setText(timeTools.getMonths()[calendar.get(Calendar.MONTH)]);
@@ -93,38 +86,35 @@ public class DiaryFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-//        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase("data/user/0/com.jojo.diary/mydiary.db",null);
+
+        //打开数据库，便于插入日记
         dBhelper = new DBhelper(getActivity());
         SQLiteDatabase db = dBhelper.getWritableDatabase();
+//        SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase("mydiary.db",null);
         DBManager dbManager = new DBManager(db);
+
         switch(v.getId()){
+            //清除所有输入内容的按钮
             case R.id.IV_diary_page_delete:
                 EDT_diary_title.setText("");
                 EDT_diary_content.setText("");
-                Toast.makeText(getActivity(),"delete successfully!!", Toast.LENGTH_SHORT).show();
-//                if (diaryItemHelper.getItemSize())
+                Toast.makeText(getActivity(),"clear successfully!!", Toast.LENGTH_SHORT).show();
+
                 break;
 
+            //保存所有输入、存入数据库DBdiary中，并清空输入内容
             case R.id.IV_diary_page_save:
-//                if (diaryItemHelper.getItemSize()>0){
-//                    saveDiary();
-//                    Toast.makeText(getActivity(),"Save successfully!!", Toast.LENGTH_SHORT).show();
-//                }else{
-//                    Toast.makeText(getActivity(),"Diary is empty!", Toast.LENGTH_SHORT).show();
-//                }
-//                Toast.makeText(getActivity(),"save successfully!!", Toast.LENGTH_SHORT).show();
                 saveDiary(dbManager);
                 db.close();
                 EDT_diary_title.setText("");
                 EDT_diary_content.setText("");
                 break;
-            case R.id.IV_diary_music:
-                Toast.makeText(getActivity(),"music successfully!!", Toast.LENGTH_SHORT).show();
-                break;
 
-            case R.id.RL_diary_info:
-                Toast.makeText(getActivity(),"calendar successfully!!", Toast.LENGTH_SHORT).show();
-                break;
+//            //为日记选择音乐的按钮
+//            case R.id.IV_diary_music:
+//                Toast.makeText(getActivity(),"music successfully!!", Toast.LENGTH_SHORT).show();
+//                break;
+
             default:
                 db.close();
                 break;
@@ -132,7 +122,7 @@ public class DiaryFragment extends Fragment implements View.OnClickListener {
     }
 
     private void saveDiary(DBManager dbManager) {
-//        dbManager.openDB();
+        //获得输入内容
         title = EDT_diary_title.getText().toString();
         content = EDT_diary_content.getText().toString();
         date = "" + calendar.get(Calendar.YEAR) + "-" +
@@ -140,21 +130,17 @@ public class DiaryFragment extends Fragment implements View.OnClickListener {
                 calendar.get(Calendar.DAY_OF_MONTH) + " " +
                 calendar.get(Calendar.HOUR_OF_DAY) + ":" +
                 calendar.get(Calendar.MINUTE);
+        //将数据插入到数据库中
         dbManager.insertDiary(date,title,content);
 
+        //刷新浏览我的日记界面：ViewFragment
         ViewFragment.diaryItemList=new ArrayList<diaryItem>();
         ViewFragment.diaryItemList=dbManager.getDiaryItemList(ViewFragment.diaryItemList);
 
         int index = ViewFragment.diaryItemList.size();
-//        Log.e("diaryItemList.size",""+index);
-//        Log.e("diaryItem(index - 1)",""+ViewFragment.diaryItemList.get(index - 1).getId());
-
         long diaryId = ViewFragment.diaryItemList.get(index - 1).getId();
-//        Log.e("diaryId",""+diaryId);
-//        Log.e("插入日记刷新",""+index);
+
         diaryItem item = dbManager.getDiaryItem(diaryId);
         ViewFragment.recycleAdapter.add(item,(int)index);
-
-//        dbManager.closeDB();
     }
 }

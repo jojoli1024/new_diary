@@ -11,6 +11,7 @@ public class InitActivity extends Activity {
     // 闪屏时间
     private static int WAITING_TIME = 2000;
 
+    //设置启动页面的时间与跳转至主页面
     @Override
     protected void onCreate(Bundle saveInstanceState) {
         super.onCreate(saveInstanceState);
