@@ -37,7 +37,7 @@ public class recycleAdapter extends RecyclerView.Adapter<recycleAdapter.MyViewHo
             this.itemView.setOnLongClickListener(this);
         }
 
-        //单价item浏览日记
+        //单击item浏览日记
         @Override
         public void onClick(View v) {
             //打开一个日记浏览模式

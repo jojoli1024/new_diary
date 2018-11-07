@@ -32,6 +32,8 @@ import android.widget.Toast;
 import com.jojo.diary.R;
 import com.jojo.diary.db.DBManager;
 import com.jojo.diary.db.DBhelper;
+import com.jojo.diary.main.InitActivity;
+import com.jojo.diary.main.MainActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -145,6 +147,7 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
     private void setAlarm(String Sdate,String memoInfo) {
         //将获得是的时间由String转为long型
         simpleDateFormat = new SimpleDateFormat("MM-dd HH:mm");
+        Log.e("Sdate",""+Sdate);
         Date Ddate = null;
         try {
             Ddate = simpleDateFormat.parse(Sdate);
@@ -152,8 +155,20 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
             Toast.makeText(getActivity(), "设置提醒失败", Toast.LENGTH_SHORT).show();
         }
         time = Ddate.getTime();
+        Log.e("time",""+time);
 
-        NotificationManager manager = (NotificationManager) getContext()
+        Date nowDate = new Date(System.currentTimeMillis());
+        String nowString = simpleDateFormat.format(nowDate);
+        try {
+            nowDate = simpleDateFormat.parse(nowString);
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), "当前时间失败", Toast.LENGTH_SHORT).show();
+        }
+
+        long now = nowDate.getTime();
+        Log.e("now",""+now);
+
+        final NotificationManager manager = (NotificationManager) getContext()
                 .getSystemService(Context.NOTIFICATION_SERVICE);
 
         //android8.0版本及以上，必须设置NotificationChannel！！
@@ -169,15 +184,21 @@ public class MemoFragment extends Fragment implements View.OnClickListener{
                 .setContentTitle("备忘录:")
                 .setContentText(memoInfo)
                 .setChannelId("chanel_id")
-                .setWhen(time)                          //延迟时间效果不佳，待修改
+                //延迟时间效果不佳，待修改
                 .setContentIntent(pendingIntent)
                 .setDefaults(Notification.DEFAULT_VIBRATE)
                 .setVibrate(new long[] {0,300,500,700});//实现效果：延迟0ms，然后振动300ms。在延迟500ms，接着在振动700ms
-        Notification notification = builder.build();
+        final Notification notification = builder.build();
         notification.flags |= Notification.FLAG_INSISTENT;//让声音、振动无限循环，直到用户响应 （取消或者打开）
 
-        manager.notify(1, notification);
-
+        //TODO 添加线程
+        Log.e("时间差",""+(time-System.currentTimeMillis()));
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                manager.notify(1, notification);
+            }
+        },time-now);
     }
 
     @Override

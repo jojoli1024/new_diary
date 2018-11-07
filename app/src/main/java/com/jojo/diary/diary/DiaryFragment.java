@@ -105,7 +105,7 @@ public class DiaryFragment extends Fragment implements View.OnClickListener {
             //保存所有输入、存入数据库DBdiary中，并清空输入内容
             case R.id.IV_diary_page_save:
                 saveDiary(dbManager);
-                db.close();
+//                db.close();
                 EDT_diary_title.setText("");
                 EDT_diary_content.setText("");
                 break;
@@ -116,7 +116,7 @@ public class DiaryFragment extends Fragment implements View.OnClickListener {
 //                break;
 
             default:
-                db.close();
+//                db.close();
                 break;
         }
     }

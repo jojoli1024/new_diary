@@ -24,4 +24,9 @@
         <item name="colorPrimaryDark">@color/themeColor</item>
     </style>
 
+    <style name="Pop" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@drawable/view_top_shadow</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
 </resources>

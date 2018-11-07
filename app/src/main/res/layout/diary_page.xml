@@ -1,7 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent">
+    android:background="@android:color/transparent"
+    >
 
     // 底部的删除、保存栏
     <LinearLayout
@@ -141,7 +142,8 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:weightSum="1">
+                    android:weightSum="1"
+                    >
 
                     // 编辑标题内容
                     <EditText
@@ -164,12 +166,25 @@
                         android:visibility="visible" />
 
 
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="music name"
+                        android:layout_weight="1"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:gravity="right"
+                        android:hint="@string/diary_title_hint"
+                        android:textColor="@color/themeColor"
+                        android:visibility="visible"/>
+
                 </LinearLayout>
 
                 // 日记内容
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    >
 
                     // 日记内容编辑+显示
                     <LinearLayout
